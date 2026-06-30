@@ -1,12 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService, UpdateProductRequest } from '@core/services/product.service';
@@ -23,12 +17,6 @@ import { switchMap } from 'rxjs/operators';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSlideToggleModule,
     MatIconModule,
     ReactiveFormsModule
   ],
@@ -101,6 +89,16 @@ export class ProductDetailComponent implements OnInit {
 
   getPlaceholderImage(): string {
     return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TaW4gSW1hZ2VuPC90ZXh0Pjwvc3ZnPg==';
+  }
+
+  decrementQty(): void {
+    const current = this.addToCartForm.get('quantity')?.value ?? 1;
+    if (current > 1) this.addToCartForm.patchValue({ quantity: current - 1 });
+  }
+
+  incrementQty(maxStock: number): void {
+    const current = this.addToCartForm.get('quantity')?.value ?? 1;
+    if (current < maxStock) this.addToCartForm.patchValue({ quantity: current + 1 });
   }
 
   selectImage(index: number): void {

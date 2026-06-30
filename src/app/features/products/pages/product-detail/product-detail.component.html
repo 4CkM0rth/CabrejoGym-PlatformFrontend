@@ -1,217 +1,321 @@
-<div class="product-detail-container" *ngIf="product$ | async as product">
-  <!-- MODO VISTA NORMAL -->
-  <div class="product-main" *ngIf="!isEditMode">
-    <!-- Galería de Imágenes -->
-    <div class="product-images-gallery">
-      <div class="main-image-container" (click)="openImageModal()">
-        <img [src]="getCurrentImage(product)" 
-             [alt]="product.name" 
-             class="main-image">
-        
-        <!-- Indicador de zoom -->
-        <div class="zoom-indicator">
+<!-- ── Loading ── -->
+<div class="pd-loading" *ngIf="!(product$ | async)">
+  <div class="pd-spinner"></div>
+  <p>Cargando producto…</p>
+</div>
+
+<div class="pd-wrapper" *ngIf="product$ | async as product">
+
+  <!-- ── Breadcrumb ── -->
+  <nav class="pd-breadcrumb">
+    <a routerLink="/home">Inicio</a>
+    <mat-icon>chevron_right</mat-icon>
+    <a routerLink="/products">Productos</a>
+    <mat-icon>chevron_right</mat-icon>
+    <span>{{ product.name }}</span>
+  </nav>
+
+  <!-- ════════════════════════════════════
+       MODO VISTA
+  ════════════════════════════════════ -->
+  <div class="pd-main" *ngIf="!isEditMode">
+
+    <!-- ── Columna izquierda: galería ── -->
+    <div class="pd-gallery">
+      <!-- Imagen principal -->
+      <div class="pd-main-img-wrap" (click)="openImageModal()">
+        <img [src]="getCurrentImage(product)" [alt]="product.name" class="pd-main-img" />
+
+        <!-- Badge descuento sobre imagen -->
+        <div class="pd-discount-badge" *ngIf="product.hasDiscount && product.discountPercent">
+          -{{ product.discountPercent | number:'1.0-0' }}%
+        </div>
+
+        <!-- Zoom hint -->
+        <div class="pd-zoom-hint">
           <mat-icon>zoom_in</mat-icon>
-          <span>Click para ampliar</span>
+          <span>Ampliar</span>
         </div>
       </div>
-      
-      <!-- Thumbnails / Navegación de imágenes -->
-      <div class="image-thumbnails" *ngIf="product.images && product.images.length > 1">
-        <button 
-          *ngFor="let image of product.images; let i = index"
-          class="thumbnail-btn"
+
+      <!-- Thumbnails -->
+      <div class="pd-thumbnails" *ngIf="product.images && product.images.length > 1">
+        <button
+          *ngFor="let img of product.images; let i = index"
+          class="pd-thumb"
           [class.active]="currentImageIndex === i"
           (click)="selectImage(i)">
-          <img [src]="image.url" [alt]="image.altText || product.name">
+          <img [src]="img.url" [alt]="img.altText || product.name" />
         </button>
       </div>
 
-      <!-- Navegación con flechas si hay múltiples imágenes -->
-      <div class="image-navigation" *ngIf="product.images && product.images.length > 1">
-        <button class="nav-btn prev" (click)="previousImage(product); $event.stopPropagation()" [disabled]="currentImageIndex === 0">
+      <!-- Flechas -->
+      <div class="pd-arrows" *ngIf="product.images && product.images.length > 1">
+        <button class="pd-arrow" (click)="previousImage(product); $event.stopPropagation()"
+          [disabled]="currentImageIndex === 0">
           <mat-icon>chevron_left</mat-icon>
         </button>
-        <button class="nav-btn next" (click)="nextImage(product); $event.stopPropagation()" [disabled]="currentImageIndex === product.images.length - 1">
+        <button class="pd-arrow" (click)="nextImage(product); $event.stopPropagation()"
+          [disabled]="currentImageIndex === product.images.length - 1">
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
     </div>
 
-    <!-- Modal de imagen ampliada -->
-    <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <button class="modal-close" (click)="closeImageModal()">
-          <mat-icon>close</mat-icon>
-        </button>
-        
-        <div class="modal-image-container">
-          <img [src]="getCurrentImage(product)" 
-               [alt]="product.name"
-               class="modal-image">
-        </div>
+    <!-- ── Columna derecha: info ── -->
+    <div class="pd-info">
 
-        <!-- Navegación en modal -->
-        <div class="modal-navigation" *ngIf="product.images && product.images.length > 1">
-          <button class="modal-nav-btn prev" (click)="previousImage(product)" [disabled]="currentImageIndex === 0">
-            <mat-icon>chevron_left</mat-icon>
-          </button>
-          <button class="modal-nav-btn next" (click)="nextImage(product)" [disabled]="currentImageIndex === product.images.length - 1">
-            <mat-icon>chevron_right</mat-icon>
-          </button>
-        </div>
-
-        <!-- Contador de imágenes -->
-        <div class="image-counter" *ngIf="product.images && product.images.length > 1">
-          {{ currentImageIndex + 1 }} / {{ product.images.length }}
-        </div>
-
-        <!-- Thumbnails en modal -->
-        <div class="modal-thumbnails" *ngIf="product.images && product.images.length > 1">
-          <button 
-            *ngFor="let image of product.images; let i = index"
-            class="modal-thumbnail-btn"
-            [class.active]="currentImageIndex === i"
-            (click)="selectImage(i)">
-            <img [src]="image.url" [alt]="image.altText || product.name">
-          </button>
-        </div>
+      <!-- Categoría / Marca chips -->
+      <div class="pd-chips">
+        <span class="pd-chip" *ngIf="product.category">
+          <mat-icon>category</mat-icon>
+          {{ product.category.name }}
+        </span>
+        <span class="pd-chip" *ngIf="product.brand">
+          <mat-icon>branding_watermark</mat-icon>
+          {{ product.brand.name }}
+        </span>
       </div>
-    </div>
 
-    <div class="product-info">
-      <h1>{{ product.name }}</h1>
-      <p class="short-description" *ngIf="product.shortDescription">{{ product.shortDescription }}</p>
-      <p class="description">{{ product.description }}</p>
+      <!-- Título -->
+      <h1 class="pd-title">{{ product.name }}</h1>
 
-      <div class="price-section">
-        <div class="price-container" *ngIf="product.hasDiscount && product.discountPercent; else normalPrice">
-          <span class="original-price">${{ product.price | number:'1.0-0':locale }}</span>
-          <span class="discount-badge">{{ product.discountPercent }}% OFF</span>
-          <span class="final-price">${{ (product.price * (1 - product.discountPercent / 100)) | number:'1.0-0':locale }}</span>
-        </div>
-        <ng-template #normalPrice>
-          <span class="final-price">${{ product.price | number:'1.0-0':locale }}</span>
+      <!-- Descripción corta -->
+      <p class="pd-short-desc" *ngIf="product.shortDescription">
+        {{ product.shortDescription }}
+      </p>
+
+      <!-- Divider -->
+      <div class="pd-divider"></div>
+
+      <!-- Precio -->
+      <div class="pd-price-section">
+        <ng-container *ngIf="product.hasDiscount && product.discountPercent; else noDiscount">
+          <span class="pd-original-price">${{ product.price | number:'1.0-0':locale }}</span>
+          <div class="pd-price-row">
+            <span class="pd-final-price">${{ (product.price * (1 - product.discountPercent / 100)) | number:'1.0-0':locale }}</span>
+            <span class="pd-saving-tag">Ahorras ${{ (product.price * product.discountPercent / 100) | number:'1.0-0':locale }}</span>
+          </div>
+        </ng-container>
+        <ng-template #noDiscount>
+          <span class="pd-final-price">${{ product.price | number:'1.0-0':locale }}</span>
         </ng-template>
       </div>
 
-      <p class="stock" [ngClass]="{ 'out-of-stock': product.stock === 0 }">
-        {{ product.stock > 0 ? 'Disponible' : 'Agotado' }}
-      </p>
+      <!-- Stock -->
+      <div class="pd-stock-row">
+        <div class="pd-stock-badge" [class.out]="product.stock === 0">
+          <span class="stock-dot"></span>
+          {{ product.stock > 0 ? 'Disponible · ' + product.stock + ' unidades' : 'Agotado' }}
+        </div>
+      </div>
 
-      <form [formGroup]="addToCartForm" (ngSubmit)="onAddToCart(product.id)" class="add-to-cart-form">
-        <mat-form-field appearance="outline">
-          <input matInput type="number" min="1" max="99" formControlName="quantity" placeholder="Cantidad*">
-        </mat-form-field>
+      <!-- Divider -->
+      <div class="pd-divider"></div>
 
-        <button 
-          mat-raised-button 
-          type="submit"
-          class="add-to-cart-btn"
-          [disabled]="product.stock === 0">
-          Agregar al Carrito
-        </button>
+      <!-- Cantidad + CTA -->
+      <form [formGroup]="addToCartForm" class="pd-cart-form" (ngSubmit)="onAddToCart(product.id)">
+        <div class="pd-qty-label">Cantidad</div>
+        <div class="pd-qty-cta">
+          <div class="pd-qty-stepper">
+            <button type="button" class="qty-btn" (click)="decrementQty()" [disabled]="addToCartForm.get('quantity')?.value <= 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <input type="number" formControlName="quantity" class="qty-input" min="1" [max]="product.stock" />
+            <button type="button" class="qty-btn" (click)="incrementQty(product.stock)" [disabled]="addToCartForm.get('quantity')?.value >= product.stock">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <button type="submit" class="pd-cta-btn" [disabled]="product.stock === 0">
+            <mat-icon>add_shopping_cart</mat-icon>
+            {{ product.stock > 0 ? 'Agregar al Carrito' : 'Agotado' }}
+          </button>
+        </div>
       </form>
 
-      <div class="product-details">
-        <h3>Detalles del Producto</h3>
-        <p><strong>Categoría:</strong> {{ product.category?.name }}</p>
-        <p><strong>Marca:</strong> {{ product.brand?.name }}</p>
+      <!-- Trust badges -->
+      <div class="pd-trust">
+        <div class="trust-item">
+          <mat-icon>local_shipping</mat-icon>
+          <span>Envío a domicilio</span>
+        </div>
+        <div class="trust-item">
+          <mat-icon>shield</mat-icon>
+          <span>Compra protegida</span>
+        </div>
+        <div class="trust-item">
+          <mat-icon>autorenew</mat-icon>
+          <span>Devoluciones fáciles</span>
+        </div>
+      </div>
+
+      <!-- Admin edit button -->
+      <div class="pd-admin-bar" *ngIf="hasAdminRole()">
+        <button class="pd-edit-btn" (click)="toggleEditMode()">
+          <mat-icon>edit</mat-icon>
+          Editar Producto
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Descripción completa + Detalles ── -->
+  <div class="pd-bottom" *ngIf="!isEditMode">
+
+    <!-- Tabs -->
+    <div class="pd-tabs">
+      <button class="pd-tab active">Descripción</button>
+      <button class="pd-tab" *ngIf="product.tags?.length">Etiquetas</button>
+    </div>
+
+    <div class="pd-tab-content">
+      <!-- Descripción completa -->
+      <p class="pd-full-desc">{{ product.description }}</p>
+
+      <!-- Detalles adicionales -->
+      <div class="pd-details-grid">
+        <div class="pd-detail-item" *ngIf="product.category">
+          <mat-icon>category</mat-icon>
+          <div>
+            <span class="detail-label">Categoría</span>
+            <span class="detail-value">{{ product.category.name }}</span>
+          </div>
+        </div>
+        <div class="pd-detail-item" *ngIf="product.brand">
+          <mat-icon>branding_watermark</mat-icon>
+          <div>
+            <span class="detail-label">Marca</span>
+            <span class="detail-value">{{ product.brand.name }}</span>
+          </div>
+        </div>
+        <div class="pd-detail-item">
+          <mat-icon>inventory_2</mat-icon>
+          <div>
+            <span class="detail-label">Stock disponible</span>
+            <span class="detail-value">{{ product.stock }} unidades</span>
+          </div>
+        </div>
+        <div class="pd-detail-item" *ngIf="product.hasVariants">
+          <mat-icon>tune</mat-icon>
+          <div>
+            <span class="detail-label">Variantes</span>
+            <span class="detail-value">{{ product.variants?.length || 0 }} disponibles</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="pd-tags" *ngIf="product.tags?.length">
+        <span class="pd-tag" *ngFor="let tag of product.tags">{{ tag.name }}</span>
       </div>
     </div>
   </div>
 
-  <!-- MODO EDICIÓN PARA ADMIN -->
-  <div class="product-edit" *ngIf="isEditMode">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Editar Producto</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="editForm" class="edit-form">
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Nombre del Producto</mat-label>
-              <input matInput formControlName="name" required>
-            </mat-form-field>
+  <!-- ════════════════════════════════════
+       MODO EDICIÓN (admin)
+  ════════════════════════════════════ -->
+  <div class="pd-edit-mode" *ngIf="isEditMode">
+    <div class="edit-card">
+      <div class="edit-card-header">
+        <div>
+          <h2>Editar Producto</h2>
+          <p>{{ product.name }}</p>
+        </div>
+        <button class="pd-cancel-btn" (click)="onCancelEdit()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+      </div>
+
+      <form [formGroup]="editForm" class="edit-form">
+        <div class="edit-field">
+          <label class="edit-label">Nombre del Producto</label>
+          <input class="edit-input" formControlName="name" />
+        </div>
+
+        <div class="edit-field">
+          <label class="edit-label">Descripción Corta</label>
+          <input class="edit-input" formControlName="shortDescription" />
+        </div>
+
+        <div class="edit-field">
+          <label class="edit-label">Descripción Completa</label>
+          <textarea class="edit-input edit-textarea" formControlName="description" rows="4"></textarea>
+        </div>
+
+        <div class="edit-row">
+          <div class="edit-field">
+            <label class="edit-label">Precio (COP)</label>
+            <input class="edit-input" type="number" formControlName="price" />
           </div>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Descripción Corta</mat-label>
-              <input matInput formControlName="shortDescription">
-            </mat-form-field>
+          <div class="edit-field">
+            <label class="edit-label">Stock</label>
+            <input class="edit-input" type="number" formControlName="stock" />
           </div>
+        </div>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Descripción Completa</mat-label>
-              <textarea matInput formControlName="description" rows="4"></textarea>
-            </mat-form-field>
+        <div class="edit-row">
+          <div class="edit-field">
+            <label class="edit-label">Categoría</label>
+            <select class="edit-select" formControlName="categoryId">
+              <option [ngValue]="null">Sin categoría</option>
+              <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+            </select>
           </div>
-
-          <div class="form-row two-columns">
-            <mat-form-field appearance="outline">
-              <mat-label>Precio</mat-label>
-              <input matInput type="number" formControlName="price" required>
-              <span matPrefix>$ </span>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Stock</mat-label>
-              <input matInput type="number" formControlName="stock" required>
-            </mat-form-field>
+          <div class="edit-field">
+            <label class="edit-label">Marca</label>
+            <select class="edit-select" formControlName="brandId">
+              <option [ngValue]="null">Sin marca</option>
+              <option *ngFor="let br of brands" [ngValue]="br.id">{{ br.name }}</option>
+            </select>
           </div>
+        </div>
 
-          <div class="form-row">
-            <mat-slide-toggle formControlName="hasDiscount">
-              Tiene Descuento
-            </mat-slide-toggle>
-          </div>
+        <div class="edit-toggle-row">
+          <label class="toggle-label">
+            <input type="checkbox" formControlName="hasDiscount" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            Tiene descuento
+          </label>
+        </div>
 
-          <div class="form-row" *ngIf="editForm.value.hasDiscount">
-            <mat-form-field appearance="outline">
-              <mat-label>Porcentaje de Descuento</mat-label>
-              <input matInput type="number" formControlName="discountPercent" min="0" max="100">
-              <span matSuffix>%</span>
-            </mat-form-field>
-          </div>
+        <div class="edit-field" *ngIf="editForm.value.hasDiscount">
+          <label class="edit-label">Porcentaje de Descuento (%)</label>
+          <input class="edit-input" type="number" formControlName="discountPercent" min="0" max="100" />
+        </div>
 
-          <div class="form-row two-columns">
-            <mat-form-field appearance="outline">
-              <mat-label>Categoría</mat-label>
-              <mat-select formControlName="categoryId">
-                <mat-option [value]="null">Sin categoría</mat-option>
-                <mat-option *ngFor="let category of categories" [value]="category.id">
-                  {{ category.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Marca</mat-label>
-              <mat-select formControlName="brandId">
-                <mat-option [value]="null">Sin marca</mat-option>
-                <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                  {{ brand.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="form-actions">
-            <button mat-raised-button type="button" (click)="onCancelEdit()">
-              Cancelar
-            </button>
-            <button mat-raised-button color="primary" type="button" (click)="onSaveProduct()" [disabled]="editForm.invalid">
-              Guardar Cambios
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
+        <div class="edit-actions">
+          <button type="button" class="edit-btn-cancel" (click)="onCancelEdit()">Cancelar</button>
+          <button type="button" class="edit-btn-save" (click)="onSaveProduct()" [disabled]="editForm.invalid">
+            <mat-icon>save</mat-icon>
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
+
 </div>
 
-<div *ngIf="!(product$ | async)" class="loading">
-  Cargando...
+<!-- ── Modal imagen ampliada ── -->
+<div class="pd-modal" *ngIf="showImageModal" (click)="closeImageModal()">
+  <div class="pd-modal-inner" (click)="$event.stopPropagation()">
+    <button class="pd-modal-close" (click)="closeImageModal()"><mat-icon>close</mat-icon></button>
+
+    <ng-container *ngIf="product$ | async as product">
+      <img [src]="getCurrentImage(product)" [alt]="product.name" class="pd-modal-img" />
+
+      <div class="pd-modal-nav" *ngIf="product.images && product.images.length > 1">
+        <button class="pd-modal-arrow" (click)="previousImage(product)" [disabled]="currentImageIndex === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span class="pd-modal-counter">{{ currentImageIndex + 1 }} / {{ product.images.length }}</span>
+        <button class="pd-modal-arrow" (click)="nextImage(product)" [disabled]="currentImageIndex === product.images.length - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>
