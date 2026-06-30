@@ -41,6 +41,21 @@ export class BranchDetailComponent implements OnInit {
     );
   }
 
+  parseSchedule(hours: string): { day: string; hours: string }[] {
+    // Formato esperado: "Lun-Vie: 5:00 am - 9:30 pm. Sab-Fest: 8:00 am - 3:00 pm. Dom: 9:00 am - 1:00 pm."
+    return hours
+      .split('.')
+      .map(s => s.trim())
+      .filter(s => s.includes(':'))
+      .map(s => {
+        const colonIdx = s.indexOf(':');
+        return {
+          day:   s.slice(0, colonIdx).trim(),
+          hours: s.slice(colonIdx + 1).trim()
+        };
+      });
+  }
+
   getBranchCoverImage(branch: Branch): string {
     if (branch.images?.length) {
       const primary = branch.images.find(i => i.isPrimary) ?? branch.images[0];

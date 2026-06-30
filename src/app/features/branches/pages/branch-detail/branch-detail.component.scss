@@ -163,7 +163,12 @@ $dark:   #1a1a1a;
 :host-context(body.dark-theme) .bd-action-btn.maps { color: $accent; }
 
 // ── Amenities ─────────────────────────────────
-.bd-amenities-grid { display: flex; flex-direction: column; gap: 12px; }
+// Ahora es full-width → multi-columna
+.bd-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
 .bd-amenity { display: flex; align-items: flex-start; gap: 12px; }
 .bd-amenity-icon {
   width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px;
@@ -225,6 +230,92 @@ $dark:   #1a1a1a;
 .bd-plan-price { display: flex; align-items: baseline; gap: 4px; padding-top: 12px; border-top: 1px solid var(--border-light); }
 .bd-plan-amount { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em; }
 .bd-plan-period { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+// ── Schedule ──────────────────────────────────
+.bd-schedule-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bd-schedule-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.bd-schedule-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(76,175,80,0.08);
+  border: 1px solid rgba(76,175,80,0.2);
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.bd-schedule-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #4caf50;
+  flex-shrink: 0;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.bd-schedule-live-text {
+  font-size: 0.78rem; font-weight: 600;
+  color: #4caf50; font-family: 'Poppins', sans-serif;
+}
+
+.bd-schedule-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bd-schedule-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: var(--bg-hover); }
+}
+
+.bd-slot-day {
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text-primary);
+  min-width: 110px; flex-shrink: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.bd-slot-divider {
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+  min-width: 20px;
+}
+
+.bd-slot-hours {
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--text-secondary);
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+}
 
 // ── Map ───────────────────────────────────────
 .bd-map-wrap { display: flex; flex-direction: column; gap: 14px; }

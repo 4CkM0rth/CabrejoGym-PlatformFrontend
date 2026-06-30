@@ -85,13 +85,6 @@
               <a class="bd-info-link" [href]="'mailto:' + branch.email">{{ branch.email }}</a>
             </div>
           </div>
-          <div class="bd-info-item" *ngIf="branch.openingHours">
-            <div class="bd-info-icon"><mat-icon>schedule</mat-icon></div>
-            <div>
-              <span class="bd-info-label">Horario</span>
-              <span class="bd-info-value">{{ branch.openingHours }}</span>
-            </div>
-          </div>
         </div>
 
         <!-- Acciones rápidas -->
@@ -113,19 +106,40 @@
         </div>
       </div>
 
-      <!-- Beneficios -->
-      <div class="bd-amenities-card" *ngIf="branch.amenities?.length">
+      <!-- Horario — al lado del panel de info -->
+      <div class="bd-schedule-card" *ngIf="branch.openingHours">
         <div class="bd-card-header">
-          <mat-icon>fitness_center</mat-icon>
-          <h2>Beneficios e Instalaciones</h2>
+          <mat-icon>schedule</mat-icon>
+          <h2>Horario de Atención</h2>
         </div>
-        <div class="bd-amenities-grid">
-          <div class="bd-amenity" *ngFor="let amenity of branch.amenities">
-            <div class="bd-amenity-icon"><mat-icon>check_circle</mat-icon></div>
-            <div>
-              <span class="bd-amenity-name">{{ amenity.name }}</span>
-              <span class="bd-amenity-desc" *ngIf="amenity.description">{{ amenity.description }}</span>
+        <div class="bd-schedule-body">
+          <div class="bd-schedule-live">
+            <span class="bd-schedule-dot"></span>
+            <span class="bd-schedule-live-text">Horarios actuales</span>
+          </div>
+          <div class="bd-schedule-slots">
+            <div class="bd-schedule-row" *ngFor="let slot of parseSchedule(branch.openingHours)">
+              <span class="bd-slot-day">{{ slot.day }}</span>
+              <div class="bd-slot-divider"></div>
+              <span class="bd-slot-hours">{{ slot.hours }}</span>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Beneficios ── -->
+    <div class="bd-amenities-card" *ngIf="branch.amenities?.length">
+      <div class="bd-card-header">
+        <mat-icon>fitness_center</mat-icon>
+        <h2>Beneficios e Instalaciones</h2>
+      </div>
+      <div class="bd-amenities-grid">
+        <div class="bd-amenity" *ngFor="let amenity of branch.amenities">
+          <div class="bd-amenity-icon"><mat-icon>check_circle</mat-icon></div>
+          <div>
+            <span class="bd-amenity-name">{{ amenity.name }}</span>
+            <span class="bd-amenity-desc" *ngIf="amenity.description">{{ amenity.description }}</span>
           </div>
         </div>
       </div>
