@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -20,8 +18,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    MatSelectModule,
-    MatFormFieldModule,
     MatIconModule,
     MatTooltipModule
   ],

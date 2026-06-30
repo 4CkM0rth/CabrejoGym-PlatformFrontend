@@ -13,41 +13,41 @@
       <!-- Buscar -->
       <div class="filter-block">
         <label class="filter-label">Buscar</label>
-        <div class="filter-input-wrap">
-          <mat-icon>search</mat-icon>
-          <input formControlName="search" placeholder="Nombre del producto…" (input)="onSearchInput()" />
+        <div class="search-wrap">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input class="filter-input" formControlName="search" placeholder="Nombre del producto…" />
         </div>
       </div>
 
       <!-- Categoría -->
       <div class="filter-block">
         <label class="filter-label">Categoría</label>
-        <div class="filter-select-wrap">
-          <mat-icon>category</mat-icon>
-          <mat-select formControlName="category" placeholder="Todas" panelClass="products-select-panel">
-            <mat-option [value]="null">Todas las categorías</mat-option>
-            <mat-optgroup *ngFor="let parent of rootCategories" [label]="parent.name">
-              <mat-option [value]="parent.id">Todos ({{ parent.name }})</mat-option>
-              <mat-option *ngFor="let child of parent.children" [value]="child.id">
+        <div class="select-wrap">
+          <select class="filter-select" formControlName="category" (change)="applyFilters()">
+            <option [ngValue]="null">Todas las categorías</option>
+            <optgroup *ngFor="let parent of rootCategories" [label]="parent.name">
+              <option [ngValue]="parent.id">Todos ({{ parent.name }})</option>
+              <option *ngFor="let child of parent.children" [ngValue]="child.id">
                 {{ child.name }}
-              </mat-option>
-            </mat-optgroup>
-            <mat-option *ngFor="let cat of standaloneCategories" [value]="cat.id">
+              </option>
+            </optgroup>
+            <option *ngFor="let cat of standaloneCategories" [ngValue]="cat.id">
               {{ cat.name }}
-            </mat-option>
-          </mat-select>
+            </option>
+          </select>
+          <mat-icon class="select-chevron">expand_more</mat-icon>
         </div>
       </div>
 
       <!-- Marca -->
       <div class="filter-block">
         <label class="filter-label">Marca</label>
-        <div class="filter-select-wrap">
-          <mat-icon>branding_watermark</mat-icon>
-          <mat-select formControlName="brand" placeholder="Todas" panelClass="products-select-panel">
-            <mat-option [value]="null">Todas las marcas</mat-option>
-            <mat-option *ngFor="let br of brands$ | async" [value]="br.id">{{ br.name }}</mat-option>
-          </mat-select>
+        <div class="select-wrap">
+          <select class="filter-select" formControlName="brand" (change)="applyFilters()">
+            <option [ngValue]="null">Todas las marcas</option>
+            <option *ngFor="let br of brands$ | async" [ngValue]="br.id">{{ br.name }}</option>
+          </select>
+          <mat-icon class="select-chevron">expand_more</mat-icon>
         </div>
       </div>
 
@@ -56,11 +56,11 @@
       <!-- Ordenar -->
       <div class="filter-block">
         <label class="filter-label">Ordenar por</label>
-        <div class="filter-select-wrap">
-          <mat-icon>sort</mat-icon>
-          <mat-select formControlName="sortBy" (selectionChange)="onSortChange()" panelClass="products-select-panel">
-            <mat-option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</mat-option>
-          </mat-select>
+        <div class="select-wrap">
+          <select class="filter-select" formControlName="sortBy" (change)="onSortChange()">
+            <option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+          <mat-icon class="select-chevron">expand_more</mat-icon>
         </div>
       </div>
 
