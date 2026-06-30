@@ -1,0 +1,83 @@
+<div class="admin-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Pedidos</h2>
+      <p class="page-subtitle">Gestión y seguimiento de órdenes</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="empty-state" *ngIf="loading">
+    <mat-icon class="spin-icon">refresh</mat-icon>
+    <p>Cargando pedidos…</p>
+  </div>
+
+  <!-- Tabla -->
+  <div class="admin-table-wrap" *ngIf="!loading">
+    <table class="admin-table" *ngIf="orders && orders.length > 0; else noOrders">
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Total</th>
+          <th>Ver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+
+          <td>
+            <span class="order-number">#{{ order.orderNumber }}</span>
+          </td>
+
+          <td>
+            <div class="customer-cell">
+              <div class="customer-avatar">{{ order.userEmail?.[0]?.toUpperCase() }}</div>
+              <span class="customer-email">{{ order.userEmail }}</span>
+            </div>
+          </td>
+
+          <td>
+            <span class="date-cell">{{ order.createdAt | date:'dd/MM/yyyy' }}</span>
+            <span class="time-cell">{{ order.createdAt | date:'HH:mm' }}</span>
+          </td>
+
+          <td>
+            <div class="status-select-wrap">
+              <select class="status-select"
+                [value]="order.status"
+                (change)="updateStatus(order.id, $any($event.target).value)"
+                [ngClass]="getStatusClass(order.status)">
+                <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+          </td>
+
+          <td>
+            <strong class="total-cell">${{ order.total | number:'1.0-0':locale }}</strong>
+          </td>
+
+          <td>
+            <button class="icon-btn" [routerLink]="['/orders', order.id]" matTooltip="Ver detalle">
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noOrders>
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <h3>No hay pedidos registrados</h3>
+        <p>Los pedidos aparecerán aquí cuando los clientes realicen compras</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

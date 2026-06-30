@@ -1,0 +1,73 @@
+<div class="products-container">
+  <div class="filters-section">
+    <h3>Filtros</h3>
+    <form [formGroup]="filterForm">
+      <mat-form-field>
+        <input matInput formControlName="search" placeholder="Buscar">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select formControlName="category" placeholder="Categoría">
+          <mat-option [value]="null">Todas las categorías</mat-option>
+          <mat-optgroup *ngFor="let parent of rootCategories" [label]="parent.name">
+            <mat-option [value]="parent.id">Todos ({{ parent.name }})</mat-option>
+            <mat-option *ngFor="let child of parent.children" [value]="child.id">
+              {{ child.name }}
+            </mat-option>
+          </mat-optgroup>
+          <mat-option *ngFor="let cat of standaloneCategories" [value]="cat.id">
+            {{ cat.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select formControlName="brand" placeholder="Marca">
+          <mat-option [value]="null">Todas las marcas</mat-option>
+          <mat-option *ngFor="let br of brands$ | async" [value]="br.id">
+            {{ br.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button class="cart-btn" (click)="applyFilters()">
+        Aplicar Filtros
+      </button>
+
+      <div class="sort-section">
+        <h3>Ordenar por</h3>
+        <mat-form-field>
+          <mat-select formControlName="sortBy" (selectionChange)="onSortChange()">
+            <mat-option *ngFor="let opt of sortOptions" [value]="opt.value">
+              {{ opt.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div class="products-grid-section">
+    <h2>Productos</h2>
+    <mat-grid-list cols="3" rowHeight="500px">
+      <mat-grid-tile *ngFor="let product of (products$ | async)?.content">
+        <mat-card class="product-card">
+          <img [src]="product.images && product.images.length > 0 ? product.images[0].url : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TaW4gSW1hZ2VuPC90ZXh0Pjwvc3ZnPg=='" 
+               [alt]="product.name" 
+               class="product-image">
+          <mat-card-content>
+            <h3>{{ product.name }}</h3>
+            <p class="description">{{ product.shortDescription || product.description }}</p>
+            <p class="price">${{ product.price | number:'1.0-0':locale }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button class="details-btn" [routerLink]="['/products', product.id]">Ver Detalles</button>
+            <button mat-raised-button class="cart-btn" (click)="addToCart(product.id)">
+              Agregar al Carrito
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+.addresses-container {
+  max-width: 1200px; margin: 0 auto; padding: 40px 20px;
+  h1 { font-size: 32px; font-weight: 700; color: var(--text-primary); margin-bottom: 30px; }
+}
+
+.addresses-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+
+.address-form {
+  ::ng-deep mat-card {
+    border-radius: 16px; box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--card-border);
+    mat-card-header { background: var(--auth-gradient); padding: 24px 28px; margin: 0; border-radius: 0;
+      mat-card-title, h2 { color: #fff212; font-size: 22px; font-weight: 700; margin: 0; }
+    }
+    mat-card-content { padding: 32px 28px; background: var(--bg-surface-alt); }
+  }
+  form { display: flex; flex-direction: column; gap: 16px; }
+
+  ::ng-deep mat-form-field {
+    width: 100%;
+    .mat-mdc-form-field-wrapper { margin-bottom: 0; padding-bottom: 0; }
+    .mat-mdc-form-field-subscript-wrapper { display: none; }
+    .mat-mdc-text-field-wrapper {
+      background: var(--input-bg); border-radius: 30px; padding: 0;
+      border: 1px solid var(--input-border); overflow: hidden; transition: all 0.2s ease;
+      &:hover { background: var(--input-hover-bg); border-color: var(--input-hover-border); }
+    }
+    .mat-mdc-form-field-infix { padding: 14px 20px; min-height: 52px; border: none; }
+    .mdc-notched-outline, .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch, .mdc-notched-outline__trailing { display: none; border: none; }
+    .mat-mdc-floating-label, .mdc-floating-label { display: none; }
+    .mat-mdc-input-element { font-size: 15px; color: var(--input-text); padding: 0;
+      &::placeholder { color: var(--input-placeholder); opacity: 1; } &:focus { outline: none; }
+    }
+    .mat-mdc-select {
+      .mat-mdc-select-placeholder { color: var(--input-placeholder); }
+      .mat-mdc-select-value, .mat-mdc-select-value-text { color: var(--input-text); font-size: 15px; }
+      .mat-mdc-select-arrow { color: var(--text-secondary); }
+    }
+    &.mat-focused .mat-mdc-text-field-wrapper { background: var(--input-bg); border-color: var(--input-border); }
+    .mat-mdc-form-field-focus-overlay { display: none; }
+    .mat-mdc-form-field-ripple, .mat-mdc-line-ripple, .mdc-line-ripple { display: none; }
+  }
+
+  ::ng-deep mat-checkbox {
+    margin: 12px 0; .mdc-checkbox__background { border-color: var(--border-color); border-radius: 6px; }
+    &.mat-mdc-checkbox-checked .mdc-checkbox__background { background-color: #ff4081; border-color: #ff4081; }
+    .mdc-label { color: var(--text-primary); font-size: 15px; }
+  }
+
+  .actions {
+    display: flex; gap: 12px; margin-top: 24px;
+    .save-btn { flex: 1; padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 30px; background-color: #fff212; color: #1a1a1a;
+      &:hover:not(:disabled) { background-color: #e6d910; transform: translateY(-1px); } &:disabled { opacity: 0.5; }
+    }
+    .cancel-btn { flex: 1; padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 30px;
+      background-color: var(--input-bg); color: var(--text-secondary); border: 1px solid var(--input-border);
+      &:hover { background-color: var(--input-hover-bg); }
+    }
+  }
+}
+
+.addresses-list {
+  ::ng-deep mat-card {
+    border-radius: 16px; box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--card-border);
+    mat-card-header { background: var(--auth-gradient); padding: 24px 28px; margin: 0; border-radius: 0;
+      mat-card-title, h2 { color: #fff212; font-size: 22px; font-weight: 700; margin: 0; }
+    }
+    mat-card-content { padding: 28px; background: var(--bg-surface-alt); }
+  }
+  .empty-state { text-align: center; padding: 40px 20px; p { color: var(--text-muted); font-size: 16px; margin: 0; } }
+}
+
+.addresses-table {
+  width: 100%; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);
+  ::ng-deep {
+    th { background: var(--bg-surface); color: var(--text-primary); font-weight: 600; font-size: 14px; text-transform: uppercase; padding: 16px 12px; }
+    td { padding: 16px 12px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); font-size: 15px; }
+    tr:last-child td { border-bottom: none; }
+    button[mat-icon-button] { transition: all 0.2s ease; border-radius: 8px;
+      &[color="primary"] { color: var(--text-primary); &:hover { background-color: var(--bg-hover); } }
+      &[color="warn"] { color: #dc3545; &:hover { background-color: rgba(220, 53, 69, 0.1); } }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background: var(--card-bg); border-radius: 40px; box-shadow: var(--shadow-md);
+  padding: 16px; max-height: 320px; border: 1px solid var(--card-border); margin-top: 8px;
+  .mat-mdc-option {
+    min-height: 48px; padding: 12px 20px; font-size: 15px; color: var(--text-primary);
+    transition: all 0.2s ease; border-radius: 30px; margin-bottom: 6px;
+    &:hover { background-color: var(--bg-hover); }
+    &.mdc-list-item--selected { background-color: #fff212; color: #1a1a1a; font-weight: 500;
+      &:hover { background-color: #e6d910; }
+    }
+    .mdc-list-item__primary-text { color: inherit; }
+  }
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+}
+
+@media (max-width: 1024px) { .addresses-content { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+  .addresses-container { padding: 20px 15px; h1 { font-size: 26px; } }
+  .address-form {
+    ::ng-deep mat-card { mat-card-header { padding: 20px 20px; } mat-card-content { padding: 24px 20px; } }
+    form { gap: 14px; }
+    ::ng-deep mat-form-field .mat-mdc-form-field-infix { padding: 12px 18px; min-height: 48px; }
+    .actions { flex-direction: column; }
+  }
+  .addresses-table { font-size: 13px; ::ng-deep { th, td { padding: 10px 8px; } } }
+}

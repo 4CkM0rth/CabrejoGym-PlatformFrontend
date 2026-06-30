@@ -1,0 +1,66 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>person</mat-icon>
+      <h2>Editar Usuario</h2>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="dialogRef.close()">
+      <span class="close-icon">✕</span>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <div class="user-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="user.firstName" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Apellido</mat-label>
+          <input matInput [(ngModel)]="user.lastName" required>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="user.email" type="email" required>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Rol</mat-label>
+          <mat-select [(ngModel)]="user.role" [disabled]="isSelf">
+            <mat-option value="USER">Usuario</mat-option>
+            <mat-option value="ADMIN">Administrador</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [(ngModel)]="user.birthDate" type="date">
+        </mat-form-field>
+      </div>
+
+      <!-- Reset password -->
+      <div class="password-section">
+        <button mat-button class="toggle-password-btn" (click)="showPasswordField = !showPasswordField" [disabled]="isSelf">
+          <mat-icon>{{ showPasswordField ? 'lock_open' : 'lock' }}</mat-icon>
+          {{ showPasswordField ? 'Cancelar cambio de contraseña' : 'Restablecer contraseña' }}
+        </button>
+        <mat-form-field appearance="outline" class="full-width" *ngIf="showPasswordField">
+          <mat-label>Nueva Contraseña</mat-label>
+          <input matInput [(ngModel)]="newPassword" type="password" minlength="6">
+          <mat-hint>Mínimo 6 caracteres</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <div class="dialog-footer">
+    <button mat-button class="cancel-btn" (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button class="save-btn" (click)="save()" [disabled]="saving || !user.firstName || !user.lastName || !user.email">
+      <mat-icon *ngIf="saving" class="spinner">sync</mat-icon>
+      {{ saving ? 'Guardando...' : 'Guardar Cambios' }}
+    </button>
+  </div>
+</div>

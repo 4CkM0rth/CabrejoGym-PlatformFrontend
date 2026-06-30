@@ -1,0 +1,77 @@
+.loading-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10000; height: 3px;
+  ::ng-deep {
+    .mdc-linear-progress__bar-inner { border-color: #fff212 !important; }
+    .mdc-linear-progress__buffer-bar { background-color: rgba(255,242,18,0.2) !important; }
+  }
+}
+
+.branch-cell {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.branch-avatar {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(255,242,18,0.1);
+  border: 1px solid rgba(255,242,18,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; color: #b8a200; }
+}
+
+:host-context(body.dark-theme) .branch-avatar mat-icon { color: #fff212; }
+
+.branch-cell-info {
+  display: flex; flex-direction: column; gap: 2px; min-width: 0;
+}
+
+.branch-name {
+  font-size: 0.88rem; font-weight: 600; color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+}
+
+.branch-address {
+  font-size: 0.72rem; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+}
+
+.contact-cell {
+  display: flex; flex-direction: column; gap: 3px;
+
+  span {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.8rem; color: var(--text-secondary);
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; color: var(--text-muted); }
+  }
+}
+
+.text-muted { font-size: 0.82rem; color: var(--text-muted); }
+
+.status-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 20px; border: 1.5px solid var(--border-color);
+  background: transparent; cursor: pointer;
+  font-size: 0.76rem; font-weight: 600;
+  font-family: 'Poppins', sans-serif; color: var(--text-muted);
+  transition: all 0.2s;
+
+  .toggle-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border-color); transition: background 0.2s; flex-shrink: 0;
+  }
+
+  &.active {
+    border-color: rgba(76,175,80,0.35); color: #4caf50;
+    background: rgba(76,175,80,0.06);
+    .toggle-dot { background: #4caf50; }
+  }
+
+  &:hover { border-color: #1a1a1a; }
+}
+
+:host-context(body.dark-theme) .status-toggle:hover { border-color: #fff212; }
+
+.row-actions { display: flex; align-items: center; gap: 2px; }

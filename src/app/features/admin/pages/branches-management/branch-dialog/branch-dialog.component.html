@@ -1,0 +1,157 @@
+<div class="dialog-wrapper">
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <mat-icon>{{isEditMode ? 'edit_note' : 'add_business'}}</mat-icon>
+      </div>
+      <h2>{{isEditMode ? 'Editar Sede' : 'Nueva Sede'}}</h2>
+    </div>
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
+      <span class="close-icon">✕</span>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content>
+    <form [formGroup]="branchForm" class="branch-form">
+
+      <!-- Sección: Info básica -->
+      <div class="form-section">
+        <div class="section-label">Información básica</div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre de la Sede</mat-label>
+          <input matInput formControlName="name" placeholder="Ej: Sede Principal Centro">
+          <mat-error *ngIf="branchForm.get('name')?.invalid">{{getErrorMessage('name')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" rows="3"
+                    placeholder="Descripción de la sede"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Sección: Ubicación -->
+      <div class="form-section">
+        <div class="section-label">Ubicación</div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="city" placeholder="Ej: Bogotá">
+            <mat-error *ngIf="branchForm.get('city')?.invalid">{{getErrorMessage('city')}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="address" placeholder="Ej: Calle 100 #15-20">
+            <mat-error *ngIf="branchForm.get('address')?.invalid">{{getErrorMessage('address')}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Latitud</mat-label>
+            <input matInput type="number" formControlName="latitude" placeholder="Ej: 2.9273">
+            <mat-icon matPrefix>my_location</mat-icon>
+            <mat-error *ngIf="branchForm.get('latitude')?.invalid">{{getErrorMessage('latitude')}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Longitud</mat-label>
+            <input matInput type="number" formControlName="longitude" placeholder="Ej: -75.2819">
+            <mat-icon matPrefix>my_location</mat-icon>
+            <mat-error *ngIf="branchForm.get('longitude')?.invalid">{{getErrorMessage('longitude')}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Sección: Contacto -->
+      <div class="form-section">
+        <div class="section-label">Contacto</div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="phone" placeholder="Ej: +57 300 123 4567">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error *ngIf="branchForm.get('phone')?.invalid">{{getErrorMessage('phone')}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="sede@ejemplo.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="branchForm.get('email')?.invalid">{{getErrorMessage('email')}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Sección: Detalles -->
+      <div class="form-section">
+        <div class="section-label">Detalles</div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Horario de Atención</mat-label>
+          <input matInput formControlName="openingHours" placeholder="Ej: Lun-Vie 6:00am - 10:00pm">
+          <mat-icon matPrefix>schedule</mat-icon>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Capacidad (personas)</mat-label>
+            <input matInput type="number" formControlName="capacity" placeholder="0">
+            <mat-icon matPrefix>people</mat-icon>
+            <mat-error *ngIf="branchForm.get('capacity')?.invalid">{{getErrorMessage('capacity')}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Área (m²)</mat-label>
+            <input matInput type="number" formControlName="areaSqm" placeholder="0">
+            <mat-icon matPrefix>square_foot</mat-icon>
+            <mat-error *ngIf="branchForm.get('areaSqm')?.invalid">{{getErrorMessage('areaSqm')}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Sección: Imagen -->
+      <div class="form-section">
+        <div class="section-label">Imagen principal</div>
+        <div class="image-area">
+          <div class="image-preview" *ngIf="imagePreview; else noImage">
+            <img [src]="imagePreview" alt="Preview">
+            <button mat-icon-button class="remove-img" (click)="removeImage()" type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <ng-template #noImage>
+            <div class="image-placeholder" (click)="fileInput.click()">
+              <mat-icon>add_photo_alternate</mat-icon>
+              <span>Agregar imagen</span>
+            </div>
+          </ng-template>
+          <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden>
+          <div class="image-actions">
+            <button mat-stroked-button type="button" (click)="fileInput.click()" class="upload-btn">
+              <mat-icon>upload</mat-icon> Subir archivo
+            </button>
+            <mat-form-field appearance="outline" class="url-field">
+              <mat-label>URL de imagen</mat-label>
+              <input matInput formControlName="imageUrl" placeholder="https://..." (blur)="onImageUrlChange()">
+              <mat-icon matPrefix>link</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button mat-button (click)="onCancel()" [disabled]="loading" class="cancel-btn">Cancelar</button>
+    <button mat-raised-button (click)="onSubmit()" [disabled]="loading || branchForm.invalid" class="save-btn">
+      <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+      {{loading ? 'Guardando...' : (isEditMode ? 'Guardar Cambios' : 'Crear Sede')}}
+    </button>
+  </div>
+</div>

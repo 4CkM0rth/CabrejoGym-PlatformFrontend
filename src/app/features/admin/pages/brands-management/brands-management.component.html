@@ -1,0 +1,89 @@
+<div class="admin-page">
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Marcas</h2>
+      <p class="page-subtitle">{{ filteredBrands.length }} marcas registradas</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="page-btn page-btn-primary" (click)="openBrandDialog()">
+        <mat-icon>add</mat-icon>
+        Nueva Marca
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-bar">
+    <div class="filter-input-wrap">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Buscar marca…" />
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="admin-table-wrap" *ngIf="!loading">
+    <table class="admin-table" *ngIf="filteredBrands.length > 0; else emptyBrands">
+      <thead>
+        <tr>
+          <th>Marca</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let brand of filteredBrands">
+
+          <td>
+            <div class="brand-cell">
+              <div class="brand-logo-wrap">
+                <img *ngIf="brand.logoUrl" [src]="brand.logoUrl" [alt]="brand.name" />
+                <span *ngIf="!brand.logoUrl">{{ brand.name?.[0] }}</span>
+              </div>
+              <div class="brand-cell-info">
+                <span class="brand-name">{{ brand.name }}</span>
+                <span class="brand-slug">{{ brand.slug }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="description-cell">{{ brand.description || '—' }}</span>
+          </td>
+
+          <td>
+            <button class="status-toggle" [class.active]="brand.active" (click)="toggleBrandStatus(brand)">
+              <span class="toggle-dot"></span>
+              <span>{{ brand.active ? 'Activa' : 'Inactiva' }}</span>
+            </button>
+          </td>
+
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn" (click)="editBrand(brand)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="icon-btn danger" (click)="deleteBrand(brand)" matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyBrands>
+      <div class="empty-state">
+        <mat-icon>branding_watermark</mat-icon>
+        <h3>No se encontraron marcas</h3>
+        <p>Crea una nueva marca para comenzar</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

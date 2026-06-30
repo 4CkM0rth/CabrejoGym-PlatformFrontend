@@ -1,0 +1,157 @@
+<div class="admin-page">
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- ── Page Header ── -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Dashboard</h2>
+      <p class="page-subtitle">Vista general del negocio · {{ currentYear }}</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="page-btn page-btn-ghost" (click)="exportData()">
+        <mat-icon>download</mat-icon>
+        Exportar CSV
+      </button>
+      <button class="page-btn page-btn-primary" (click)="generateReport()">
+        <mat-icon>assessment</mat-icon>
+        Generar Reporte
+      </button>
+    </div>
+  </div>
+
+  <!-- ── KPIs ── -->
+  <div class="kpis-grid">
+
+    <div class="kpi-card kpi-sales">
+      <div class="kpi-icon-wrap">
+        <mat-icon>attach_money</mat-icon>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Ventas Totales</span>
+        <h3 class="kpi-value">${{ totalSales | number:'1.0-0':'es-CO' }}</h3>
+        <span class="kpi-tag">COP acumulado</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-orders">
+      <div class="kpi-icon-wrap">
+        <mat-icon>shopping_cart</mat-icon>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Pedidos</span>
+        <h3 class="kpi-value">{{ totalOrders }}</h3>
+        <span class="kpi-tag">total registrados</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-products">
+      <div class="kpi-icon-wrap">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Productos</span>
+        <h3 class="kpi-value">{{ totalProducts }}</h3>
+        <span class="kpi-tag">en catálogo</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-users">
+      <div class="kpi-icon-wrap">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-label">Usuarios</span>
+        <h3 class="kpi-value">{{ totalUsers }}</h3>
+        <span class="kpi-tag">registrados</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Charts Row 1 ── -->
+  <div class="charts-grid">
+
+    <div class="data-card">
+      <div class="data-card-header">
+        <div class="data-card-title">
+          <mat-icon>show_chart</mat-icon>
+          <span>Ventas Mensuales {{ currentYear }}</span>
+        </div>
+      </div>
+      <div class="data-card-body">
+        <div class="chart-wrap">
+          <canvas baseChart [data]="salesChartData" [options]="salesChartOptions" [type]="salesChartType"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <div class="data-card-header">
+        <div class="data-card-title">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Top 5 Productos</span>
+        </div>
+      </div>
+      <div class="data-card-body">
+        <div class="chart-wrap">
+          <canvas baseChart [data]="topProductsChartData" [options]="topProductsChartOptions" [type]="topProductsChartType"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Charts Row 2 ── -->
+  <div class="charts-secondary">
+
+    <div class="data-card">
+      <div class="data-card-header">
+        <div class="data-card-title">
+          <mat-icon>donut_large</mat-icon>
+          <span>Ventas por Producto</span>
+        </div>
+      </div>
+      <div class="data-card-body">
+        <div class="chart-wrap chart-wrap-sm">
+          <canvas baseChart [data]="categoriesChartData" [options]="categoriesChartOptions" [type]="categoriesChartType"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-card recent-orders-card">
+      <div class="data-card-header">
+        <div class="data-card-title">
+          <mat-icon>receipt_long</mat-icon>
+          <span>Pedidos Recientes</span>
+        </div>
+        <a class="header-link" routerLink="/admin/orders">
+          Ver todos <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+
+      <div class="orders-list" *ngIf="recentOrders.length > 0; else noOrders">
+        <div class="order-row" *ngFor="let order of recentOrders">
+          <div class="order-avatar">{{ order.customer ? order.customer[0].toUpperCase() : '?' }}</div>
+          <div class="order-info">
+            <span class="order-num">{{ order.id }}</span>
+            <span class="order-customer">{{ order.customer }}</span>
+          </div>
+          <div class="order-meta">
+            <span class="order-amount">${{ order.amount | number:'1.0-0':'es-CO' }}</span>
+            <span class="status-pill" [ngClass]="getStatusClass(order.status)">{{ order.status }}</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noOrders>
+        <div class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <p>No hay pedidos registrados</p>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+
+</div>

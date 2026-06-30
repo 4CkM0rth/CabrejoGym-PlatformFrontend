@@ -1,0 +1,48 @@
+.loading-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10000; height: 3px;
+  ::ng-deep {
+    .mdc-linear-progress__bar-inner { border-color: #fff212 !important; }
+    .mdc-linear-progress__buffer-bar { background-color: rgba(255,242,18,0.2) !important; }
+  }
+}
+
+.user-cell {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.user-avatar {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  color: #fff212;
+  font-size: 0.78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+:host-context(body.dark-theme) .user-avatar { background: linear-gradient(135deg, #2a2a2a, #3a3a3a); }
+
+.user-cell-info {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+
+.user-name {
+  font-size: 0.88rem; font-weight: 600; color: var(--text-primary);
+}
+
+.user-tag {
+  font-size: 0.65rem; font-weight: 700; background: rgba(255,242,18,0.12);
+  color: #b8a200; border: 1px solid rgba(255,242,18,0.3);
+  border-radius: 20px; padding: 1px 7px;
+}
+
+:host-context(body.dark-theme) .user-tag { color: #fff212; }
+
+.email-cell {
+  font-size: 0.84rem; color: var(--text-secondary);
+}
+
+.row-actions {
+  display: flex; align-items: center; gap: 2px;
+}

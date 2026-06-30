@@ -1,0 +1,125 @@
+<div class="order-detail-container">
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Cargando pedido...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && !order" class="error">
+    <mat-icon>error_outline</mat-icon>
+    <h2>Pedido no encontrado</h2>
+    <p>El pedido que buscas no existe o no tienes permiso para verlo</p>
+    <button mat-raised-button routerLink="/orders" class="back-btn">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a Mis Pedidos
+    </button>
+  </div>
+
+  <!-- Invoice -->
+  <div *ngIf="!loading && order" class="invoice-wrapper">
+    <!-- Header Actions -->
+    <div class="invoice-actions no-print">
+      <button mat-button routerLink="/orders" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        Volver a Mis Pedidos
+      </button>
+      <button mat-raised-button (click)="downloadInvoice()" class="print-btn">
+        <mat-icon>download</mat-icon>
+        Descargar Factura
+      </button>
+    </div>
+
+    <!-- Invoice Card -->
+    <mat-card class="invoice-card">
+      <!-- Invoice Header -->
+      <div class="invoice-header">
+        <div class="company-info">
+          <h1>CABREJO GYM</h1>
+          <p>Equipamiento Deportivo Profesional</p>
+          <p>RUC: 20123456789</p>
+          <p>Av. Principal 123, Neiva, Colombia</p>
+          <p>Tel: (01) 234-5678</p>
+        </div>
+        <div class="invoice-info">
+          <h2>FACTURA</h2>
+          <p><strong>N° Pedido:</strong> #{{ order.orderNumber }}</p>
+          <p><strong>Fecha:</strong> {{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+          <p><strong>Estado:</strong> 
+            <span class="status-badge" [ngClass]="'status-' + order.status.toLowerCase()">
+              {{ translateStatus(order.status) }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Customer Info -->
+      <div class="customer-section">
+        <h3>Información del Cliente</h3>
+        <div class="customer-details">
+          <p><strong>Email:</strong> {{ order.userEmail }}</p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Order Items -->
+      <div class="items-section">
+        <h3>Detalle del Pedido</h3>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-right">Precio Unit.</th>
+              <th class="text-right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of order.items">
+              <td>
+                <div class="product-info">
+                  <strong>{{ item.productName }}</strong>
+                </div>
+              </td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-right">${{ item.unitPrice | number:'1.0-0':locale }}</td>
+              <td class="text-right">${{ item.lineTotal | number:'1.0-0':locale }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Totals -->
+      <div class="totals-section">
+        <div class="totals-row">
+          <span class="label">Subtotal:</span>
+          <span class="value">${{ order.subtotal | number:'1.0-0':locale }}</span>
+        </div>
+        <div class="totals-row" *ngIf="order.discount > 0">
+          <span class="label">Descuento:</span>
+          <span class="value discount">-${{ order.discount | number:'1.0-0':locale }}</span>
+        </div>
+        <div class="totals-row total">
+          <span class="label">TOTAL:</span>
+          <span class="value">${{ order.total | number:'1.0-0':locale }}</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Footer -->
+      <div class="invoice-footer">
+        <p class="thank-you">¡Gracias por tu compra!</p>
+        <p class="footer-note">
+          Este documento es una representación impresa de una factura electrónica.
+          Para cualquier consulta, contáctanos a soporte&#64;cabrejogym.com
+        </p>
+      </div>
+    </mat-card>
+  </div>
+</div>

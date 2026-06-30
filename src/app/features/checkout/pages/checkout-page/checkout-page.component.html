@@ -1,0 +1,345 @@
+<div class="checkout-wrapper">
+
+  <!-- Page Header -->
+  <div class="checkout-header">
+    <div class="header-content">
+      <span class="header-brand">CABREJO <span class="header-brand-accent">GYM</span></span>
+      <h1 class="header-title">Finalizar Compra</h1>
+    </div>
+    <div class="header-secure">
+      <mat-icon>lock</mat-icon>
+      <span>Pago 100% seguro</span>
+    </div>
+  </div>
+
+  <div class="checkout-layout">
+
+    <!-- ── LEFT: Stepper Form ── -->
+    <div class="checkout-form-area">
+      <mat-stepper linear #stepper class="custom-stepper" animationDuration="350ms">
+
+        <!-- ── STEP 1: Dirección ── -->
+        <mat-step [stepControl]="addressForm">
+          <ng-template matStepLabel>
+            <span class="step-label">Dirección</span>
+          </ng-template>
+
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-icon-badge">
+                <mat-icon>location_on</mat-icon>
+              </div>
+              <div>
+                <h2 class="step-title">Dirección de Envío</h2>
+                <p class="step-subtitle">¿Dónde entregamos tu pedido?</p>
+              </div>
+            </div>
+
+            <form [formGroup]="addressForm" class="step-form">
+              <div class="form-row">
+                <div class="form-field-wrapper full">
+                  <label class="field-label">Calle y número</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">home</mat-icon>
+                    <input class="custom-input" formControlName="street" placeholder="Ej. Cra 15 # 93 - 47" />
+                  </div>
+                  <span class="field-error" *ngIf="addressForm.get('street')?.invalid && addressForm.get('street')?.touched">
+                    Campo requerido
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-row two-cols">
+                <div class="form-field-wrapper">
+                  <label class="field-label">Ciudad</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">location_city</mat-icon>
+                    <input class="custom-input" formControlName="city" placeholder="Bogotá" />
+                  </div>
+                  <span class="field-error" *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+                    Campo requerido
+                  </span>
+                </div>
+
+                <div class="form-field-wrapper">
+                  <label class="field-label">Departamento</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">map</mat-icon>
+                    <input class="custom-input" formControlName="state" placeholder="Cundinamarca" />
+                  </div>
+                  <span class="field-error" *ngIf="addressForm.get('state')?.invalid && addressForm.get('state')?.touched">
+                    Campo requerido
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-row two-cols">
+                <div class="form-field-wrapper">
+                  <label class="field-label">Código Postal</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">markunread_mailbox</mat-icon>
+                    <input class="custom-input" formControlName="zipCode" placeholder="110111" />
+                  </div>
+                  <span class="field-error" *ngIf="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched">
+                    Campo requerido
+                  </span>
+                </div>
+
+                <div class="form-field-wrapper">
+                  <label class="field-label">País</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">public</mat-icon>
+                    <input class="custom-input" formControlName="country" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-field-wrapper full">
+                  <label class="field-label">Teléfono de contacto</label>
+                  <div class="custom-input-wrap">
+                    <mat-icon class="input-icon">phone</mat-icon>
+                    <input class="custom-input" formControlName="phone" placeholder="+57 300 000 0000" />
+                  </div>
+                  <span class="field-error" *ngIf="addressForm.get('phone')?.invalid && addressForm.get('phone')?.touched">
+                    Campo requerido
+                  </span>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button class="btn-next" matStepperNext [disabled]="addressForm.invalid">
+                  Continuar
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-step>
+
+        <!-- ── STEP 2: Pago ── -->
+        <mat-step [stepControl]="paymentForm">
+          <ng-template matStepLabel>
+            <span class="step-label">Pago</span>
+          </ng-template>
+
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-icon-badge">
+                <mat-icon>credit_card</mat-icon>
+              </div>
+              <div>
+                <h2 class="step-title">Método de Pago</h2>
+                <p class="step-subtitle">Elige cómo quieres pagar</p>
+              </div>
+            </div>
+
+            <form [formGroup]="paymentForm" class="step-form">
+              <div class="payment-methods">
+                <label class="payment-option" [class.selected]="paymentForm.get('paymentMethod')?.value === 'CREDIT_CARD'">
+                  <input type="radio" formControlName="paymentMethod" value="CREDIT_CARD" />
+                  <mat-icon class="payment-icon">credit_card</mat-icon>
+                  <span class="payment-label">Tarjeta de Crédito</span>
+                  <mat-icon class="payment-check">check_circle</mat-icon>
+                </label>
+
+                <label class="payment-option" [class.selected]="paymentForm.get('paymentMethod')?.value === 'DEBIT_CARD'">
+                  <input type="radio" formControlName="paymentMethod" value="DEBIT_CARD" />
+                  <mat-icon class="payment-icon">account_balance_wallet</mat-icon>
+                  <span class="payment-label">Tarjeta Débito</span>
+                  <mat-icon class="payment-check">check_circle</mat-icon>
+                </label>
+
+                <label class="payment-option" [class.selected]="paymentForm.get('paymentMethod')?.value === 'PAYPAL'">
+                  <input type="radio" formControlName="paymentMethod" value="PAYPAL" />
+                  <mat-icon class="payment-icon">language</mat-icon>
+                  <span class="payment-label">PayPal</span>
+                  <mat-icon class="payment-check">check_circle</mat-icon>
+                </label>
+
+                <label class="payment-option" [class.selected]="paymentForm.get('paymentMethod')?.value === 'BANK_TRANSFER'">
+                  <input type="radio" formControlName="paymentMethod" value="BANK_TRANSFER" />
+                  <mat-icon class="payment-icon">account_balance</mat-icon>
+                  <span class="payment-label">Transferencia Bancaria</span>
+                  <mat-icon class="payment-check">check_circle</mat-icon>
+                </label>
+              </div>
+
+              <!-- Campos tarjeta -->
+              <div class="card-fields" *ngIf="paymentForm.get('paymentMethod')?.value === 'CREDIT_CARD' || paymentForm.get('paymentMethod')?.value === 'DEBIT_CARD'">
+                <div class="card-fields-header">
+                  <mat-icon>shield</mat-icon>
+                  <span>Datos de la tarjeta (simulado)</span>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field-wrapper full">
+                    <label class="field-label">Número de tarjeta</label>
+                    <div class="custom-input-wrap">
+                      <mat-icon class="input-icon">credit_card</mat-icon>
+                      <input class="custom-input" placeholder="1234  5678  9012  3456" maxlength="19" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field-wrapper full">
+                    <label class="field-label">Nombre del titular</label>
+                    <div class="custom-input-wrap">
+                      <mat-icon class="input-icon">person</mat-icon>
+                      <input class="custom-input" placeholder="NOMBRE APELLIDO" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row two-cols">
+                  <div class="form-field-wrapper">
+                    <label class="field-label">Vencimiento</label>
+                    <div class="custom-input-wrap">
+                      <mat-icon class="input-icon">date_range</mat-icon>
+                      <input class="custom-input" placeholder="MM / AA" maxlength="5" />
+                    </div>
+                  </div>
+                  <div class="form-field-wrapper">
+                    <label class="field-label">CVV</label>
+                    <div class="custom-input-wrap">
+                      <mat-icon class="input-icon">lock</mat-icon>
+                      <input class="custom-input" type="password" placeholder="•••" maxlength="4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button class="btn-back" matStepperPrevious>
+                  <mat-icon>arrow_back</mat-icon>
+                  Atrás
+                </button>
+                <button class="btn-next" matStepperNext [disabled]="paymentForm.invalid">
+                  Revisar orden
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-step>
+
+        <!-- ── STEP 3: Confirmación ── -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Confirmar</span>
+          </ng-template>
+
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-icon-badge">
+                <mat-icon>receipt_long</mat-icon>
+              </div>
+              <div>
+                <h2 class="step-title">Revisar Orden</h2>
+                <p class="step-subtitle">Confirma los detalles antes de pagar</p>
+              </div>
+            </div>
+
+            <div class="review-body">
+              <!-- Resumen datos -->
+              <div class="review-blocks">
+                <div class="review-block">
+                  <div class="review-block-label">
+                    <mat-icon>location_on</mat-icon>
+                    <span>Dirección</span>
+                  </div>
+                  <p>{{ addressForm.get('street')?.value }}, {{ addressForm.get('city')?.value }}</p>
+                  <p>{{ addressForm.get('state')?.value }}, {{ addressForm.get('country')?.value }}</p>
+                  <p>{{ addressForm.get('phone')?.value }}</p>
+                </div>
+
+                <div class="review-block">
+                  <div class="review-block-label">
+                    <mat-icon>credit_card</mat-icon>
+                    <span>Pago</span>
+                  </div>
+                  <p>{{ paymentMethodLabel }}</p>
+                </div>
+              </div>
+
+              <!-- Items del carrito -->
+              <ng-container *ngIf="cart$ | async as cart">
+                <div class="review-items" *ngIf="cart.items?.length">
+                  <h4 class="review-items-title">Productos ({{ cart.items.length }})</h4>
+                  <div class="review-item" *ngFor="let item of cart.items">
+                    <div class="review-item-info">
+                      <span class="review-item-name">{{ item.productName }}</span>
+                      <span class="review-item-qty">x{{ item.quantity }}</span>
+                    </div>
+                    <span class="review-item-price">${{ item.lineTotal | number:'1.0-0':locale }}</span>
+                  </div>
+                </div>
+
+                <div class="review-total">
+                  <span>Total a pagar</span>
+                  <span class="total-amount">${{ (cart.subtotal || 0) | number:'1.0-0':locale }}</span>
+                </div>
+              </ng-container>
+
+              <div class="step-actions">
+                <button class="btn-back" matStepperPrevious>
+                  <mat-icon>arrow_back</mat-icon>
+                  Atrás
+                </button>
+                <button class="btn-confirm" (click)="placeOrder()">
+                  <mat-icon>check_circle</mat-icon>
+                  Confirmar y Pagar
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-step>
+
+      </mat-stepper>
+    </div>
+
+    <!-- ── RIGHT: Order Summary ── -->
+    <div class="order-summary-area">
+      <div class="summary-card" *ngIf="cart$ | async as cart">
+        <div class="summary-header">
+          <h3>Tu Pedido</h3>
+          <span class="summary-badge">{{ cart.totalItems || cart.items?.length }} ítem(s)</span>
+        </div>
+
+        <div class="summary-items">
+          <div class="summary-item" *ngFor="let item of cart.items">
+            <div class="summary-item-details">
+              <span class="summary-item-name">{{ item.productName }}</span>
+              <span class="summary-item-qty">Cant. {{ item.quantity }}</span>
+            </div>
+            <span class="summary-item-price">${{ item.lineTotal | number:'1.0-0':locale }}</span>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="summary-total-amount">${{ (cart.subtotal || 0) | number:'1.0-0':locale }}</span>
+        </div>
+
+        <div class="summary-trust">
+          <div class="trust-item">
+            <mat-icon>local_shipping</mat-icon>
+            <span>Envío a domicilio</span>
+          </div>
+          <div class="trust-item">
+            <mat-icon>shield</mat-icon>
+            <span>Compra protegida</span>
+          </div>
+          <div class="trust-item">
+            <mat-icon>autorenew</mat-icon>
+            <span>Devoluciones fáciles</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

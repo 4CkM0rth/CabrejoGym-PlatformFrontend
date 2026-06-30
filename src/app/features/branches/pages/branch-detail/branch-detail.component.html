@@ -1,0 +1,153 @@
+<div class="branch-detail-container" *ngIf="branch$ | async as branch">
+  <div class="branch-header">
+    <h1>{{ branch.name }}</h1>
+  </div>
+
+  <!-- Galería de Fotos -->
+  <div class="branch-gallery" *ngIf="branch.images && branch.images.length > 0">
+    <mat-card>
+      <mat-card-header>
+        <h2>Galería de Fotos</h2>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="gallery-grid">
+          <div class="gallery-item" *ngFor="let image of branch.images">
+            <img [src]="image.url || 'assets/images/placeholder.svg'" 
+                 [alt]="branch.name" 
+                 (click)="openLightbox(image.url, branch.images)">
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="branch-content">
+    <div class="branch-info-grid">
+      <div class="branch-info">
+        <mat-card>
+          <mat-card-header>
+            <h2>Información de la Sede</h2>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="info-item">
+              <mat-icon>location_on</mat-icon>
+              <div>
+                <strong>Dirección:</strong>
+                <span>{{ branch.address }}</span>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <mat-icon>location_city</mat-icon>
+              <div>
+                <strong>Ciudad:</strong>
+                <span>{{ branch.city }}</span>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <mat-icon>phone</mat-icon>
+              <div>
+                <strong>Teléfono:</strong>
+                <span>{{ branch.phone }}</span>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <mat-icon>email</mat-icon>
+              <div>
+                <strong>Email:</strong>
+                <span>{{ branch.email }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="branch-amenities" *ngIf="branch.amenities && branch.amenities.length > 0">
+        <mat-card>
+          <mat-card-header>
+            <h2>Beneficios</h2>
+          </mat-card-header>
+
+          <mat-card-content>
+            <mat-list>
+              <mat-list-item *ngFor="let amenity of branch.amenities">
+                <mat-icon matListItemIcon>fitness_center</mat-icon>
+                <span matListItemTitle>{{ amenity.name }}</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="branch-memberships" *ngIf="branch.membershipPlans && branch.membershipPlans.length > 0">
+        <mat-card>
+          <mat-card-header>
+            <h2>Planes de Membresía</h2>
+          </mat-card-header>
+
+          <mat-card-content>
+            <mat-list>
+              <mat-list-item *ngFor="let plan of branch.membershipPlans">
+                <span matListItemTitle>{{ plan.name }}</span>
+                <span matListItemLine>${{ plan.price | number:'1.0-0':locale }}</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Mapa a ancho completo -->
+    <mat-card *ngIf="branch.latitude && branch.longitude" class="map-card">
+      <mat-card-header>
+        <h2>Ubicación</h2>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="map-container">
+          <iframe
+            [src]="getMapUrl(branch.latitude, branch.longitude) | async"
+            width="100%"
+            height="400"
+            style="border:0; border-radius: 12px;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+        <a class="map-link" [href]="'https://www.google.com/maps?q=' + branch.latitude + ',' + branch.longitude"
+           target="_blank" rel="noopener">
+          <mat-icon>open_in_new</mat-icon> Abrir en Google Maps
+        </a>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="branch-actions">
+    <button mat-raised-button class="back-btn" [routerLink]="['/branches']">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a Sedes
+    </button>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button class="lightbox-nav lightbox-prev" (click)="prevImage()" *ngIf="lightboxImages.length > 1">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <img [src]="currentImage" alt="Imagen ampliada">
+    <button class="lightbox-nav lightbox-next" (click)="nextImage()" *ngIf="lightboxImages.length > 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <div class="lightbox-counter" *ngIf="lightboxImages.length > 1">
+      {{ currentImageIndex + 1 }} / {{ lightboxImages.length }}
+    </div>
+  </div>
+</div>

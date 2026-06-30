@@ -1,0 +1,50 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>fitness_center</mat-icon>
+      <h2>Beneficios — {{ branch.name }}</h2>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="close()">
+      <span class="close-icon">✕</span>
+    </button>
+  </div>
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <mat-dialog-content>
+    <!-- Lista de beneficios existentes -->
+    <div class="amenities-list" *ngIf="amenities.length > 0">
+      <div class="amenity-item" *ngFor="let amenity of amenities">
+        <div class="amenity-info">
+          <strong>{{ amenity.name }}</strong>
+          <small *ngIf="amenity.description">{{ amenity.description }}</small>
+        </div>
+        <button mat-icon-button class="delete-btn" (click)="deleteAmenity(amenity)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && amenities.length === 0">
+      <mat-icon>info_outline</mat-icon>
+      <p>No hay beneficios registrados</p>
+    </div>
+
+    <!-- Agregar nuevo -->
+    <div class="add-section">
+      <h3>Agregar Beneficio</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="newName" placeholder="Ej: Zona de cardio">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción (opcional)</mat-label>
+        <input matInput [(ngModel)]="newDescription" placeholder="Descripción breve...">
+      </mat-form-field>
+      <button mat-raised-button class="add-btn" (click)="addAmenity()" [disabled]="saving || !newName.trim()">
+        <mat-icon>add</mat-icon>
+        {{ saving ? 'Agregando...' : 'Agregar' }}
+      </button>
+    </div>
+  </mat-dialog-content>
+</div>

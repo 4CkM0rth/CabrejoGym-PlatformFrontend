@@ -1,0 +1,113 @@
+<div class="admin-page">
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Usuarios</h2>
+      <p class="page-subtitle">{{ filteredUsers.length }} de {{ users.length }} usuarios</p>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-bar">
+    <div class="filter-input-wrap">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Buscar por nombre o email…" />
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <select [(ngModel)]="roleFilter" (change)="applyFilters()">
+        <option value="">Todos los roles</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="USER">Usuario</option>
+      </select>
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>toggle_on</mat-icon>
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="">Todos los estados</option>
+        <option value="active">Activo</option>
+        <option value="inactive">Inactivo</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="admin-table-wrap" *ngIf="!loading">
+    <table class="admin-table" *ngIf="filteredUsers.length > 0; else emptyUsers">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar">
+                {{ user.firstName?.[0] }}{{ user.lastName?.[0] }}
+              </div>
+              <div class="user-cell-info">
+                <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+                <span class="user-tag" *ngIf="user.id === currentUserId">Tú</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="email-cell">{{ user.email }}</span>
+          </td>
+
+          <td>
+            <span class="badge" [ngClass]="user.role === 'ADMIN' ? 'badge-yellow' : 'badge-neutral'">
+              {{ user.role === 'ADMIN' ? 'Admin' : 'Usuario' }}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge" [ngClass]="user.isActive ? 'badge-success' : 'badge-danger'">
+              {{ user.isActive ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn" (click)="editUser(user)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="toggleRole(user)"
+                [disabled]="user.id === currentUserId"
+                matTooltip="{{ user.role === 'ADMIN' ? 'Quitar admin' : 'Hacer admin' }}">
+                <mat-icon>{{ user.role === 'ADMIN' ? 'remove_moderator' : 'shield' }}</mat-icon>
+              </button>
+              <button class="icon-btn danger" (click)="deleteUser(user)"
+                [disabled]="user.id === currentUserId"
+                matTooltip="Eliminar usuario">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyUsers>
+      <div class="empty-state">
+        <mat-icon>people_outline</mat-icon>
+        <h3>No se encontraron usuarios</h3>
+        <p>Ajusta los filtros de búsqueda</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

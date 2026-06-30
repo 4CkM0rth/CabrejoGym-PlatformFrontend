@@ -1,0 +1,103 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>tune</mat-icon>
+      <h2>Variantes</h2>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close(true)" class="close-btn"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="dialog-body">
+    <div class="top-bar">
+      <p class="product-name">{{ product.name }}</p>
+      <button mat-stroked-button (click)="openForm()" *ngIf="!showForm" class="add-variant-btn">
+        <mat-icon>add</mat-icon> Nueva Variante
+      </button>
+    </div>
+
+    <!-- Form -->
+    <div class="variant-form" *ngIf="showForm">
+      <form [formGroup]="variantForm">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de variante</mat-label>
+            <input matInput formControlName="variantName" placeholder="Ej: Chocolate 2lb">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>SKU</mat-label>
+            <input matInput formControlName="sku">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Sabor</mat-label>
+            <input matInput formControlName="flavor">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Tamaño</mat-label>
+            <input matInput formControlName="size">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Color</mat-label>
+            <input matInput formControlName="color">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Peso</mat-label>
+            <input matInput formControlName="weight">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Ajuste de precio</mat-label>
+            <span matPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="priceAdjustment">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Stock</mat-label>
+            <input matInput type="number" formControlName="stock">
+          </mat-form-field>
+        </div>
+        <div class="form-actions">
+          <mat-slide-toggle formControlName="active">Activa</mat-slide-toggle>
+          <div class="btns">
+            <button mat-button (click)="cancelForm()">Cancelar</button>
+            <button mat-raised-button (click)="saveVariant()" class="save-btn"
+                    [disabled]="variantForm.invalid">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Variants list -->
+    <div class="variants-list" *ngIf="!loading && variants.length > 0">
+      <div class="variant-card" *ngFor="let v of variants" [class.inactive]="!v.active">
+        <div class="variant-info">
+          <strong>{{ v.variantName }}</strong>
+          <div class="variant-meta">
+            <span *ngIf="v.sku">SKU: {{ v.sku }}</span>
+            <span *ngIf="v.flavor">Sabor: {{ v.flavor }}</span>
+            <span *ngIf="v.size">Tamaño: {{ v.size }}</span>
+            <span *ngIf="v.color">Color: {{ v.color }}</span>
+            <span *ngIf="v.weight">Peso: {{ v.weight }}</span>
+          </div>
+          <div class="variant-numbers">
+            <span class="stock-tag">Stock: {{ v.stock }}</span>
+            <span *ngIf="v.priceAdjustment" class="price-adj">
+              {{ v.priceAdjustment > 0 ? '+' : '' }}${{ v.priceAdjustment }}
+            </span>
+            <span class="status-tag" [class.active]="v.active">{{ v.active ? 'Activa' : 'Inactiva' }}</span>
+          </div>
+        </div>
+        <div class="variant-actions">
+          <button mat-icon-button (click)="openForm(v)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button (click)="deleteVariant(v.id)"><mat-icon>delete_outline</mat-icon></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && variants.length === 0 && !showForm">
+      <mat-icon>tune</mat-icon>
+      <p>No hay variantes registradas</p>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button mat-raised-button (click)="dialogRef.close(true)" class="done-btn">Listo</button>
+  </div>
+</div>

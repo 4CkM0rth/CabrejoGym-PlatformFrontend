@@ -1,0 +1,126 @@
+<div class="admin-page">
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Sedes</h2>
+      <p class="page-subtitle">{{ filteredBranches.length }} sedes registradas</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="page-btn page-btn-primary" (click)="openBranchDialog()">
+        <mat-icon>add</mat-icon>
+        Nueva Sede
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-bar">
+    <div class="filter-input-wrap">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Buscar por nombre o dirección…" />
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>location_city</mat-icon>
+      <select [(ngModel)]="cityFilter" (change)="applyFilters()">
+        <option value="">Todas las ciudades</option>
+        <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+      </select>
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>toggle_on</mat-icon>
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="">Todos los estados</option>
+        <option value="active">Activa</option>
+        <option value="inactive">Inactiva</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="admin-table-wrap" *ngIf="!loading">
+    <table class="admin-table" *ngIf="filteredBranches.length > 0; else emptyBranches">
+      <thead>
+        <tr>
+          <th>Sede</th>
+          <th>Ciudad</th>
+          <th>Contacto</th>
+          <th>Capacidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let branch of filteredBranches">
+
+          <td>
+            <div class="branch-cell">
+              <div class="branch-avatar">
+                <mat-icon>location_on</mat-icon>
+              </div>
+              <div class="branch-cell-info">
+                <span class="branch-name">{{ branch.name }}</span>
+                <span class="branch-address">{{ branch.address }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="badge badge-neutral">{{ branch.city }}</span>
+          </td>
+
+          <td>
+            <div class="contact-cell">
+              <span *ngIf="branch.phone"><mat-icon>phone</mat-icon>{{ branch.phone }}</span>
+              <span *ngIf="branch.email"><mat-icon>email</mat-icon>{{ branch.email }}</span>
+              <span *ngIf="!branch.phone && !branch.email" class="text-muted">—</span>
+            </div>
+          </td>
+
+          <td>
+            <span *ngIf="branch.capacity" class="badge badge-info">{{ branch.capacity }} personas</span>
+            <span *ngIf="!branch.capacity" class="text-muted">—</span>
+          </td>
+
+          <td>
+            <button class="status-toggle" [class.active]="branch.active" (click)="toggleBranchStatus(branch)">
+              <span class="toggle-dot"></span>
+              <span>{{ branch.active ? 'Activa' : 'Inactiva' }}</span>
+            </button>
+          </td>
+
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn" (click)="editBranch(branch)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageImages(branch)" matTooltip="Imágenes">
+                <mat-icon>photo_library</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageAmenities(branch)" matTooltip="Beneficios">
+                <mat-icon>fitness_center</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageMemberships(branch)" matTooltip="Membresías">
+                <mat-icon>card_membership</mat-icon>
+              </button>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyBranches>
+      <div class="empty-state">
+        <mat-icon>store</mat-icon>
+        <h3>No se encontraron sedes</h3>
+        <p>Ajusta los filtros o crea una nueva sede</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

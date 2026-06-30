@@ -1,0 +1,39 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <h1>Iniciar Sesión</h1>
+      <p>Accede a tu cuenta de Cabrejo Gym</p>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput type="email" formControlName="email" placeholder="Email*">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput type="password" formControlName="password" placeholder="Contraseña*">
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          [disabled]="!loginForm.valid || isLoading"
+          class="full-width submit-btn">
+          <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+        </button>
+      </form>
+
+      <p class="signup-link">
+        ¿No tienes cuenta? 
+        <a routerLink="/auth/register">Regístrate aquí</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

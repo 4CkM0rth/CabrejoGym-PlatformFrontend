@@ -1,0 +1,121 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Bienvenido a Cabrejo Gym</h1>
+      <p>Descubre nuestros productos premium y nuestras sedes de entrenamiento</p>
+      <div class="hero-buttons">
+        <button mat-raised-button class="primary-btn" routerLink="/products">
+          Ver Productos
+        </button>
+        <button mat-raised-button routerLink="/branches">
+          Nuestras Sedes
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-section">
+    <h2>Productos Destacados</h2>
+    <div class="products-grid" *ngIf="(products$ | async) as productsResponse">
+      <mat-card 
+        class="product-card" 
+        *ngFor="let product of (productsResponse.content || []).slice(0, 4)"
+        [routerLink]="['/products', product.id]"
+        (mouseenter)="startImageCarousel(product.id, product.images.length || 0)"
+        (mouseleave)="stopImageCarousel(product.id)">
+        <div class="product-image-container">
+          <!-- Si tiene múltiples imágenes, mostrar todas apiladas con transición -->
+          <ng-container *ngIf="product.images && product.images.length > 1; else singleImage">
+            <img 
+              *ngFor="let img of product.images; let i = index"
+              [src]="img.url" 
+              [alt]="product.name" 
+              class="product-image carousel-image"
+              [class.active]="(productImageIndices[product.id] || 0) === i"
+              (error)="onImageError($event)">
+          </ng-container>
+          <ng-template #singleImage>
+            <img 
+              [src]="getProductImage(product)" 
+              [alt]="product.name" 
+              class="product-image"
+              (error)="onImageError($event)">
+          </ng-template>
+          
+          <!-- Indicadores de imágenes -->
+          <div class="image-indicators" *ngIf="product.images && product.images.length > 1">
+            <span 
+              *ngFor="let img of product.images; let i = index"
+              class="indicator"
+              [class.active]="(productImageIndices[product.id] || 0) === i">
+            </span>
+          </div>
+        </div>
+        <mat-card-content>
+          <h3>{{ product.name }}</h3>
+          <p class="description" *ngIf="product.shortDescription || product.description">
+            {{ product.shortDescription || product.description }}
+          </p>
+          <p class="price">${{ product.price | number:'1.0-0':locale }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button [routerLink]="['/products', product.id]" (click)="$event.stopPropagation()">
+            Ver Detalles
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Branches Section -->
+  <section class="branches-section">
+    <h2>Nuestras Sedes</h2>
+    <p class="section-subtitle">Visitanos en cualquiera de nuestras ubicaciones</p>
+    <div class="branches-grid" *ngIf="(branches$ | async) as branches">
+      <mat-card class="branch-card" *ngFor="let branch of branches.slice(0, 3)">
+        <div class="branch-image">
+          <img 
+            [src]="getBranchImage(branch)" 
+            [alt]="branch.name"
+            (error)="onImageError($event)">
+        </div>
+        
+        <mat-card-header>
+          <mat-card-title>{{ branch.name }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-item">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ branch.address }}, {{ branch.city }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>phone</mat-icon>
+            <span>{{ branch.phone }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>email</mat-icon>
+            <span>{{ branch.email }}</span>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button [routerLink]="['/branches', branch.id]">
+            Ver Detalles
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>¿Listo para empezar?</h2>
+    <p>Explora nuestros productos y encuentra la mejor membresía para ti</p>
+    <button mat-raised-button class="primary-btn" routerLink="/products" size="large">
+      Explorar Catálogo
+    </button>
+  </section>
+</div>

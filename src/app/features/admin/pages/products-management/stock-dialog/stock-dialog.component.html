@@ -1,0 +1,39 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>inventory</mat-icon>
+      <h2>Gestionar Stock</h2>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="close-btn"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <div class="dialog-body">
+    <p class="product-name">{{ product.name }}</p>
+    <p class="current-stock">Stock actual: <strong>{{ product.stock }}</strong></p>
+
+    <div class="stock-control">
+      <button mat-icon-button (click)="increment(-10)" class="ctrl-btn"><mat-icon>remove</mat-icon> </button>
+      <button mat-icon-button (click)="increment(-1)" class="ctrl-btn small"><mat-icon>remove</mat-icon></button>
+      <mat-form-field appearance="outline" class="stock-input">
+        <input matInput type="number" [(ngModel)]="newStock" min="0">
+      </mat-form-field>
+      <button mat-icon-button (click)="increment(1)" class="ctrl-btn small"><mat-icon>add</mat-icon></button>
+      <button mat-icon-button (click)="increment(10)" class="ctrl-btn"><mat-icon>add</mat-icon></button>
+    </div>
+
+    <div class="quick-actions">
+      <button mat-stroked-button (click)="increment(-50)">-50</button>
+      <button mat-stroked-button (click)="increment(-25)">-25</button>
+      <button mat-stroked-button (click)="increment(25)">+25</button>
+      <button mat-stroked-button (click)="increment(50)">+50</button>
+      <button mat-stroked-button (click)="increment(100)">+100</button>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button mat-button (click)="dialogRef.close()" class="cancel-btn">Cancelar</button>
+    <button mat-raised-button (click)="save()" [disabled]="loading" class="save-btn">
+      {{ loading ? 'Guardando...' : 'Actualizar Stock' }}
+    </button>
+  </div>
+</div>

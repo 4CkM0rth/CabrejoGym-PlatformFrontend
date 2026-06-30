@@ -1,0 +1,49 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <div class="header-icon"><mat-icon>photo_library</mat-icon></div>
+      <h2>Imágenes</h2>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close(true)" class="close-btn"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <mat-progress-bar *ngIf="uploading" mode="indeterminate" class="upload-bar"></mat-progress-bar>
+
+  <div class="dialog-body">
+    <p class="branch-name">{{ branch.name }}</p>
+
+    <div class="images-grid" *ngIf="!loading; else loadingTpl">
+      <div class="image-card" *ngFor="let img of images" [class.primary]="img.isPrimary">
+        <img [src]="img.url" [alt]="img.altText || branch.name">
+        <div class="image-badge" *ngIf="img.isPrimary">Principal</div>
+        <div class="image-actions">
+          <button mat-icon-button matTooltip="Establecer como principal"
+                  (click)="setPrimary(img.id)" *ngIf="!img.isPrimary">
+            <mat-icon>star_outline</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Eliminar" (click)="deleteImage(img.id)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="add-image-card" (click)="fileInput.click()">
+        <mat-icon>add_photo_alternate</mat-icon>
+        <span>Agregar</span>
+      </div>
+    </div>
+
+    <ng-template #loadingTpl>
+      <div class="loading-state">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p>Cargando imágenes...</p>
+      </div>
+    </ng-template>
+
+    <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden>
+  </div>
+
+  <div class="dialog-footer">
+    <button mat-raised-button (click)="dialogRef.close(true)" class="done-btn">Listo</button>
+  </div>
+</div>

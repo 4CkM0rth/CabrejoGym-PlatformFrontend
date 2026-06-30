@@ -1,0 +1,54 @@
+.account-container {
+  max-width: 800px; margin: 0 auto; padding: 40px 20px;
+  h1 { font-size: 32px; font-weight: 700; color: var(--text-primary); margin-bottom: 32px; }
+}
+
+.account-content { display: flex; flex-direction: column; gap: 24px; }
+
+::ng-deep mat-card {
+  border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--card-border); overflow: hidden;
+  mat-card-header {
+    background: var(--auth-gradient); padding: 0 24px !important; margin: 0 !important;
+    border-radius: 0; display: flex !important; align-items: center !important; min-height: 64px; height: 64px;
+    mat-card-title { color: #fff212; font-size: 20px; font-weight: 700; margin: 0 !important; padding: 0 !important; line-height: 1; }
+  }
+  mat-card-content { padding: 24px; background: var(--bg-surface-alt); }
+}
+
+.user-info .info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-bottom: 1px solid var(--border-light);
+  &:last-child { border-bottom: none; }
+  .label { color: var(--text-secondary); font-size: 15px; }
+  .value { color: var(--text-primary); font-size: 15px; font-weight: 600; }
+  .role-badge { background: #1a1a1a; color: #fff212; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; text-transform: capitalize; }
+  .status-badge { padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;
+    &.active { background: rgba(76, 175, 80, 0.15); color: #2e7d32; }
+    &.inactive { background: rgba(158, 158, 158, 0.15); color: #757575; }
+  }
+}
+
+.account-actions {
+  mat-card-content { padding: 16px; }
+  .action-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px; background: var(--card-bg); border-radius: 12px; margin-bottom: 12px;
+    transition: all 0.2s ease;
+    &:last-child { margin-bottom: 0; }
+    &:hover { background: var(--bg-hover); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .action-info .action-title { color: var(--text-primary); font-size: 16px; font-weight: 500; }
+    .action-btn {
+      min-width: 120px; padding: 10px 24px; border-radius: 24px; font-size: 14px; font-weight: 600; transition: all 0.2s ease;
+      &.primary-btn { background-color: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color); &:hover { background-color: var(--border-color); } }
+      &.secondary-btn { background-color: #fff212; color: #1a1a1a; &:hover { background-color: #e6d910; } }
+      &.disabled-btn { background-color: var(--input-bg); color: var(--text-muted); cursor: not-allowed; }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .account-container { padding: 20px 15px; h1 { font-size: 26px; margin-bottom: 24px; } }
+  ::ng-deep mat-card { mat-card-header { padding: 16px 20px; mat-card-title { font-size: 18px; } } mat-card-content { padding: 20px; } }
+  .user-info .info-row { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 0; }
+  .account-actions .action-item { flex-direction: column; align-items: stretch; gap: 12px; .action-btn { width: 100%; } }
+}

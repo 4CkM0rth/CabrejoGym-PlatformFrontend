@@ -1,0 +1,691 @@
+// ─────────────────────────────────────────────
+// CHECKOUT PAGE — CABREJO GYM
+// Paleta: #1a1a1a (negro) · #fff212 (amarillo) · #ffffff (blanco)
+// Fuente: Poppins
+// ─────────────────────────────────────────────
+
+// ── Layout Wrapper ──────────────────────────
+.checkout-wrapper {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  font-family: 'Poppins', sans-serif;
+}
+
+// ── Header ──────────────────────────────────
+.checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  background: #1a1a1a;
+  border-bottom: 3px solid #fff212;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header-brand {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.1em;
+
+    .header-brand-accent { color: #fff212; }
+  }
+
+  .header-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+
+    &::before {
+      content: '·';
+      margin-right: 20px;
+      color: rgba(255,255,255,0.3);
+    }
+  }
+
+  .header-secure {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; color: #fff212; }
+  }
+}
+
+// ── Two-column Layout ────────────────────────
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    padding: 24px 16px 60px;
+  }
+}
+
+// ── Stepper override ─────────────────────────
+.custom-stepper {
+  background: transparent;
+  box-shadow: none;
+
+  // Header step labels
+  ::ng-deep .mat-step-header {
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: background 0.2s;
+
+    &:hover { background: var(--bg-surface); }
+  }
+
+  ::ng-deep .mat-step-icon {
+    background: #e0e0e0;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+  }
+
+  ::ng-deep .mat-step-icon-selected,
+  ::ng-deep .mat-step-icon-state-done {
+    background: #fff212 !important;
+    color: #1a1a1a !important;
+  }
+
+  ::ng-deep .mat-step-label { font-family: 'Poppins', sans-serif; }
+
+  ::ng-deep .mat-stepper-horizontal-line {
+    border-top-color: #e0e0e0;
+  }
+
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    padding: 4px 8px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+// ── Step Card ────────────────────────────────
+.step-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp 0.3s ease;
+
+  @media (max-width: 600px) { padding: 20px; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Step Header ──────────────────────────────
+.step-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.step-icon-badge {
+  width: 52px;
+  height: 52px;
+  background: #1a1a1a;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    color: #fff212;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.step-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+// ── Custom Inputs ────────────────────────────
+.step-form { display: flex; flex-direction: column; gap: 4px; }
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+
+  &.two-cols { grid-template-columns: 1fr 1fr; display: grid; }
+  .full { grid-column: 1 / -1; }
+}
+
+.form-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.field-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+}
+
+.custom-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--text-muted);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    transition: color 0.2s;
+  }
+}
+
+.custom-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px 0 44px;
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+
+  &::placeholder { color: var(--text-muted); }
+
+  &:focus {
+    border-color: #1a1a1a;
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 3px rgba(255, 242, 18, 0.25);
+
+    & ~ .input-icon,
+    + .input-icon { color: #1a1a1a; }
+  }
+
+  &:focus + .input-icon,
+  &:focus ~ .input-icon { color: #1a1a1a; }
+}
+
+.custom-input-wrap:focus-within .input-icon { color: #1a1a1a; }
+
+.field-error {
+  font-size: 0.72rem;
+  color: var(--danger);
+  font-family: 'Poppins', sans-serif;
+  padding-left: 4px;
+}
+
+// ── Payment Options ──────────────────────────
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  @media (max-width: 500px) { grid-template-columns: 1fr; }
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--bg-surface-alt);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+
+  input[type="radio"] { display: none; }
+
+  .payment-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+
+  .payment-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  .payment-check {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--border-color);
+    transition: color 0.2s;
+  }
+
+  &:hover {
+    border-color: #1a1a1a;
+    background: var(--bg-hover);
+  }
+
+  &.selected {
+    border-color: #fff212;
+    background: rgba(255, 242, 18, 0.06);
+    box-shadow: 0 0 0 3px rgba(255, 242, 18, 0.2);
+
+    .payment-icon { color: #1a1a1a; }
+    .payment-check { color: #1a1a1a; }
+    .payment-label { font-weight: 600; }
+  }
+}
+
+// ── Card Fields box ──────────────────────────
+.card-fields {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.25s ease;
+
+  .card-fields-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    font-family: 'Poppins', sans-serif;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; color: var(--success); }
+  }
+}
+
+// ── Step Actions ─────────────────────────────
+.step-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+}
+
+// Botón: Siguiente / Continuar
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 28px;
+  height: 48px;
+  background: #1a1a1a;
+  color: #fff212;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; transition: transform 0.2s; }
+
+  &:hover:not(:disabled) {
+    background: #2d2d2d;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    mat-icon { transform: translateX(3px); }
+  }
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// Botón: Confirmar (CTA principal)
+.btn-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 36px;
+  height: 52px;
+  background: #fff212;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(255, 242, 18, 0.4);
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+  &:hover {
+    background: #e6d910;
+    box-shadow: 0 6px 28px rgba(255, 242, 18, 0.5);
+    transform: translateY(-1px);
+  }
+
+  &:active { transform: translateY(0); }
+}
+
+// Botón: Atrás (ghost)
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 20px;
+  height: 48px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+  &:hover {
+    border-color: #1a1a1a;
+    color: #1a1a1a;
+    background: var(--bg-surface);
+  }
+}
+
+// ── Review Step ──────────────────────────────
+.review-body { display: flex; flex-direction: column; gap: 20px; }
+
+.review-blocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 500px) { grid-template-columns: 1fr; }
+}
+
+.review-block {
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 16px;
+
+  .review-block-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  }
+
+  p {
+    font-size: 0.87rem;
+    color: var(--text-primary);
+    margin: 2px 0;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.5;
+  }
+}
+
+.review-items {
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 16px;
+
+  .review-items-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+.review-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-family: 'Poppins', sans-serif;
+
+  &:last-child { border-bottom: none; }
+
+  .review-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .review-item-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .review-item-qty {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .review-item-price {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+.review-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #1a1a1a;
+  border-radius: 14px;
+  font-family: 'Poppins', sans-serif;
+
+  span:first-child {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .total-amount {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff212;
+  }
+}
+
+// ── Order Summary (right panel) ──────────────
+.order-summary-area { position: relative; }
+
+.summary-card {
+  position: sticky;
+  top: 24px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 28px;
+  color: #ffffff;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  font-family: 'Poppins', sans-serif;
+
+  @media (max-width: 860px) { position: static; }
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+  }
+
+  .summary-badge {
+    background: rgba(255, 242, 18, 0.15);
+    color: #fff212;
+    border: 1px solid rgba(255, 242, 18, 0.3);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+}
+
+.summary-items { display: flex; flex-direction: column; gap: 12px; }
+
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+
+  .summary-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .summary-item-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .summary-item-qty {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .summary-item-price {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
+  }
+}
+
+.summary-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 20px 0;
+}
+
+.summary-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 20px;
+
+  span:first-child {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+  }
+
+  .summary-total-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff212;
+  }
+}
+
+.summary-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #fff212;
+    flex-shrink: 0;
+  }
+}
+
+// ── Step label ───────────────────────────────
+.step-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+}

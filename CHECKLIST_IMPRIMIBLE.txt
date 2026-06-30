@@ -1,0 +1,307 @@
+================================================================================
+CHECKLIST IMPRIMIBLE - CABREJO GYM FRONTEND
+Estado: 100% Completo
+================================================================================
+
+REQUISITOS PREVIOS (Antes de empezar)
+================================================================================
+
+[ ] Node.js 18.x o superior instalado
+    Comando: node --version
+    Esperado: v18.x.x o mayor
+
+[ ] npm 9.x o superior instalado
+    Comando: npm --version
+    Esperado: 9.x.x o mayor
+
+[ ] Carpeta del proyecto descargada en:
+    c:\Users\sebas\Desktop\Cabrejo Gym\platform-ecommerce-frontend\
+
+[ ] Acceso a la carpeta (no bloqueado por permisos)
+    Comando: cd "c:\Users\sebas\Desktop\Cabrejo Gym\platform-ecommerce-frontend\"
+
+================================================================================
+FASE 1: INSTALACIÓN (Tiempo estimado: 7-10 minutos)
+================================================================================
+
+Paso 1: Abrir PowerShell/Terminal
+[ ] PowerShell abierto
+[ ] Navegado a carpeta correcta (comando: cd "...")
+[ ] Verificó que está en la carpeta correcta (comando: Get-ChildItem | head)
+
+Paso 2: Instalar dependencias
+[ ] Ejecutado: npm install
+[ ] Esperando que termine (puede tomar 5-10 minutos)
+[ ] Vio mensaje final: "added XXX packages in X seconds"
+[ ] NO hay errores rojos en la instalación
+
+Paso 3: Verificar instalación
+[ ] Ejecutado: npx ng version
+[ ] Salida muestra Angular 18.x
+[ ] Salida muestra TypeScript 5.x
+
+================================================================================
+FASE 2: CONFIGURACIÓN (Tiempo estimado: 2-3 minutos)
+================================================================================
+
+Paso 1: Actualizar URL del backend
+[ ] Abrir archivo: src/environments/environment.ts
+[ ] Encontrado: apiUrl: 'http://localhost:8080/api'
+[ ] Actualizado con URL correcta (o dejado como está si es localhost)
+[ ] Guardado el archivo (Ctrl+S)
+
+Paso 2: Verificar Backend
+[ ] Backend está corriendo
+[ ] Backend escucha en puerto 8080 (o el que configuraste)
+[ ] Backend tiene CORS configurado para localhost:4200
+
+Paso 3: Agregar Logo (Opcional)
+[ ] Crear carpeta: src/assets/images/
+[ ] Copiar logo: cabrejo-gym-logo.png a esa carpeta
+[ ] Resultado: src/assets/images/cabrejo-gym-logo.png existe
+
+================================================================================
+FASE 3: EJECUCIÓN (Tiempo estimado: 1-2 minutos)
+================================================================================
+
+Paso 1: Iniciar servidor
+[ ] Ejecutado: npm start
+[ ] Terminal muestra: "Compiled successfully" o "Built successfully"
+[ ] Terminal muestra: "→ Local: http://localhost:4200/"
+
+Paso 2: Abrir en navegador
+[ ] Se abrió automáticamente http://localhost:4200
+[ ] Si no se abrió, abierto manualmente en Chrome/Firefox/Edge
+
+Paso 3: Verificar carga
+[ ] Página cargó sin errores en blanco
+[ ] Se ve: Header con logo de Cabrejo Gym
+[ ] Se ve: Menu de navegación
+[ ] Se ve: Hero section con contenido
+[ ] Se ve: Products section con items
+[ ] Se ve: Footer con información
+
+================================================================================
+FASE 4: VERIFICACIÓN BÁSICA (2-3 minutos)
+================================================================================
+
+Paso 1: Verificar Navegación
+[ ] Clicado en "Productos" -> Fue a /products
+[ ] Clicado en "Sucursales" -> Fue a /branches
+[ ] Clicado en logo -> Volvió a home
+[ ] Volver atrás/adelante funciona
+
+Paso 2: Verificar Header
+[ ] Logo visible
+[ ] Menu visible (Productos, Sucursales, etc.)
+[ ] Carrito visible en esquina superior derecha
+[ ] Botón usuario visible
+[ ] Sin errores en posición o alineación
+
+Paso 3: Verificar Footer
+[ ] Footer visible al fondo
+[ ] Información de contacto visible
+[ ] Links funcionales (no necesitan ir a ningún lado)
+[ ] Alineación correcta en móvil (F12 → Toggle Device)
+
+Paso 4: Verificar Responsive
+[ ] Abierto DevTools (F12)
+[ ] Abierto "Toggle Device Toolbar" (Ctrl+Shift+M)
+[ ] Seleccionado iPhone 12 o similar
+[ ] Página se ve bien en móvil
+[ ] Menu responsive funciona
+
+================================================================================
+FASE 5: CONSOLE CHECK (1 minuto)
+================================================================================
+
+[ ] Abierto DevTools (F12)
+[ ] Ido a pestaña "Console"
+[ ] Visto el mensaje de bienvenida (opcional)
+[ ] NO hay errores en rojo
+[ ] NO hay errores críticos en naranja
+[ ] Puede haber warnings en amarillo (NORMAL)
+
+Si hay errores rojos:
+[ ] Anotado el error exacto
+[ ] Revisado en QUICK_START.md → Troubleshooting
+[ ] Revisado en SETUP_CHECKLIST.md → Troubleshooting
+
+================================================================================
+FASE 6: AUTENTICACIÓN (2-3 minutos)
+================================================================================
+
+Paso 1: Verificar UI de Login
+[ ] Clicado en "Inicia sesión" en header
+[ ] Navegó a /auth/login
+[ ] Vio formulario con campos: Email y Password
+[ ] Vio botón: "Iniciar sesión"
+[ ] Vio link: "Crear cuenta"
+
+Paso 2: Verificar UI de Register
+[ ] Clicado en "Crear cuenta" en login
+[ ] Navegó a /auth/register
+[ ] Vio formulario con campos: Nombre, Apellido, Email, Password
+[ ] Vio botón: "Registrarse"
+
+Nota: El login/register NO funcionará hasta conectar backend
+Esto es NORMAL en esta fase
+
+================================================================================
+FASE 7: CONEXIÓN BACKEND (5 minutos - Solo si tienes backend)
+================================================================================
+
+Preparativos:
+[ ] Backend Spring Boot está corriendo (en puerto 8080)
+[ ] Backend tiene CORS configurado para:
+    - origin: http://localhost:4200
+    - methods: GET, POST, PUT, DELETE, OPTIONS
+    - headers: Authorization, Content-Type
+
+Prueba de conexión:
+[ ] Ido a http://localhost:4200/auth/login
+[ ] Abierto DevTools (F12)
+[ ] Ido a pestaña "Network"
+[ ] Ingresado credenciales de test (si tienes usuarios de prueba)
+[ ] Clicado "Iniciar sesión"
+[ ] Visto request POST en Network tab
+[ ] Visto response 200 OK (si credenciales correctas)
+[ ] Visto token en response
+[ ] Token guardado automático en localStorage
+
+Si falla:
+[ ] Error 404: URL del API incorrecta
+[ ] Error CORS: Backend no tiene CORS configurado
+[ ] Error 401: Credenciales incorrectas
+[ ] Connection refused: Backend no está corriendo
+
+================================================================================
+FASE 8: FUNCIONALIDADES CLAVE (Opcional, 5-10 minutos)
+================================================================================
+
+Paso 1: Products
+[ ] Ido a /products
+[ ] Visto lista de productos (si backend conectado)
+[ ] Visto filtros en sidebar
+[ ] Vio buscador funcionando/visible
+[ ] Clicado en producto -> Fue a detalle
+
+Paso 2: Cart (si autenticado)
+[ ] Ido a /cart
+[ ] Si NO logueado: Fue a /auth/login (CORRECTO - está protegido)
+[ ] Si logueado: Vio tabla de carrito (vacía o con items)
+
+Paso 3: Admin (si tiene rol ADMIN)
+[ ] Ido a /admin
+[ ] Si NO logueado: Fue a /auth/login
+[ ] Si no es ADMIN: Ve error o página vacía
+[ ] Si es ADMIN: Ve dashboard con cards de gestión
+
+================================================================================
+FASE 9: FINAL CHECK (1 minuto)
+================================================================================
+
+[ ] Servidor sigue corriendo sin crashes
+[ ] No hay errores en console (F12)
+[ ] Navegación funciona
+[ ] Responsive funciona (mobile & desktop)
+[ ] Proyecto está listo para desarrollo
+
+================================================================================
+PRÓXIMOS PASOS
+================================================================================
+
+Corto Plazo (Hoy):
+[ ] Explorar documentación:
+    → EMPEZAR_AQUI.md (si no lo hiciste)
+    → QUICK_START.md (referencia)
+    → DEVELOPMENT.md (para empezar a código)
+
+Mediano Plazo (Esta semana):
+[ ] Leer ARCHITECTURE.md (entender flujos)
+[ ] Leer source code (LOGIN, PRODUCTS, CART)
+[ ] Empezar a hacer cambios pequeños
+
+Largo Plazo (Antes de producción):
+[ ] npm run build (generar dist/)
+[ ] Verificar bundle size
+[ ] Deploy a hosting (Firebase, Vercel, etc.)
+[ ] Pruebas completas en producción
+
+================================================================================
+COMANDOS ÚTILES (Referencia rápida)
+================================================================================
+
+DESARROLLO:
+npm start                      → Inicia servidor en puerto 4200
+npm start -- --port 4300      → Inicia en puerto diferente
+npm test                       → Ejecuta tests
+
+BUILD:
+npm run build                  → Build producción
+
+VERIFICACIÓN:
+npx ng version                 → Ver versiones
+npx ng doctor                  → Diagnóstico
+
+LIMPIEZA:
+npm cache clean --force        → Limpiar cache npm
+rm -r node_modules/            → Borrar dependencias (si falla)
+
+TROUBLESHOOTING:
+npm install (de nuevo)         → Si falla algo
+ctrl + c                       → Detener servidor
+
+================================================================================
+SOPORTE & DOCUMENTACIÓN
+================================================================================
+
+Documentos disponibles:
+  ► EMPEZAR_AQUI.md            - Setup rápido 10 minutos
+  ► QUICK_START.md             - Referencia rápida
+  ► README.md                  - Documentación completa (400+ líneas)
+  ► DEVELOPMENT.md             - Cómo desarrollar, patterns
+  ► ARCHITECTURE.md            - Diagramas, flujos técnicos
+  ► PROJECT_SUMMARY.md         - Estadísticas, resumen
+  ► MAP.md                     - Dónde está cada cosa
+  ► INDEX.md                   - Índice del proyecto
+  ► SETUP_CHECKLIST.md         - Checklist detallado
+  ► RESUMEN_EJECUTIVO.md       - Resumen para PMs
+  ► GUIA_RAPIDA.md             - Guía según tu rol
+
+Problemas comunes: Ver SETUP_CHECKLIST.md → Troubleshooting section
+
+================================================================================
+NOTAS PERSONALES
+================================================================================
+
+Fecha que empecé:  _______________
+Usuario:           _______________
+Notas:             _______________
+                   _______________
+                   _______________
+
+Problemas encontrados:
+_______________________________________________
+_______________________________________________
+
+Soluciones aplicadas:
+_______________________________________________
+_______________________________________________
+
+Contactos/Referencias:
+_______________________________________________
+_______________________________________________
+
+================================================================================
+FIN CHECKLIST
+================================================================================
+
+✅ Si completaste TODO = El proyecto está listo para desarrollar
+⚠️  Si salteaste todo = Vuelve al principio y sigue paso a paso
+
+¡Felicidades! 🎉 Tu frontend está instalado y funcionando.
+
+Próximo: Lee EMPEZAR_AQUI.md o GUIA_RAPIDA.md según tu rol
+
+================================================================================

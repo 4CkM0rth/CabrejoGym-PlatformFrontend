@@ -1,0 +1,217 @@
+<div class="product-detail-container" *ngIf="product$ | async as product">
+  <!-- MODO VISTA NORMAL -->
+  <div class="product-main" *ngIf="!isEditMode">
+    <!-- Galería de Imágenes -->
+    <div class="product-images-gallery">
+      <div class="main-image-container" (click)="openImageModal()">
+        <img [src]="getCurrentImage(product)" 
+             [alt]="product.name" 
+             class="main-image">
+        
+        <!-- Indicador de zoom -->
+        <div class="zoom-indicator">
+          <mat-icon>zoom_in</mat-icon>
+          <span>Click para ampliar</span>
+        </div>
+      </div>
+      
+      <!-- Thumbnails / Navegación de imágenes -->
+      <div class="image-thumbnails" *ngIf="product.images && product.images.length > 1">
+        <button 
+          *ngFor="let image of product.images; let i = index"
+          class="thumbnail-btn"
+          [class.active]="currentImageIndex === i"
+          (click)="selectImage(i)">
+          <img [src]="image.url" [alt]="image.altText || product.name">
+        </button>
+      </div>
+
+      <!-- Navegación con flechas si hay múltiples imágenes -->
+      <div class="image-navigation" *ngIf="product.images && product.images.length > 1">
+        <button class="nav-btn prev" (click)="previousImage(product); $event.stopPropagation()" [disabled]="currentImageIndex === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button class="nav-btn next" (click)="nextImage(product); $event.stopPropagation()" [disabled]="currentImageIndex === product.images.length - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal de imagen ampliada -->
+    <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="modal-close" (click)="closeImageModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+        
+        <div class="modal-image-container">
+          <img [src]="getCurrentImage(product)" 
+               [alt]="product.name"
+               class="modal-image">
+        </div>
+
+        <!-- Navegación en modal -->
+        <div class="modal-navigation" *ngIf="product.images && product.images.length > 1">
+          <button class="modal-nav-btn prev" (click)="previousImage(product)" [disabled]="currentImageIndex === 0">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button class="modal-nav-btn next" (click)="nextImage(product)" [disabled]="currentImageIndex === product.images.length - 1">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <!-- Contador de imágenes -->
+        <div class="image-counter" *ngIf="product.images && product.images.length > 1">
+          {{ currentImageIndex + 1 }} / {{ product.images.length }}
+        </div>
+
+        <!-- Thumbnails en modal -->
+        <div class="modal-thumbnails" *ngIf="product.images && product.images.length > 1">
+          <button 
+            *ngFor="let image of product.images; let i = index"
+            class="modal-thumbnail-btn"
+            [class.active]="currentImageIndex === i"
+            (click)="selectImage(i)">
+            <img [src]="image.url" [alt]="image.altText || product.name">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p class="short-description" *ngIf="product.shortDescription">{{ product.shortDescription }}</p>
+      <p class="description">{{ product.description }}</p>
+
+      <div class="price-section">
+        <div class="price-container" *ngIf="product.hasDiscount && product.discountPercent; else normalPrice">
+          <span class="original-price">${{ product.price | number:'1.0-0':locale }}</span>
+          <span class="discount-badge">{{ product.discountPercent }}% OFF</span>
+          <span class="final-price">${{ (product.price * (1 - product.discountPercent / 100)) | number:'1.0-0':locale }}</span>
+        </div>
+        <ng-template #normalPrice>
+          <span class="final-price">${{ product.price | number:'1.0-0':locale }}</span>
+        </ng-template>
+      </div>
+
+      <p class="stock" [ngClass]="{ 'out-of-stock': product.stock === 0 }">
+        {{ product.stock > 0 ? 'Disponible' : 'Agotado' }}
+      </p>
+
+      <form [formGroup]="addToCartForm" (ngSubmit)="onAddToCart(product.id)" class="add-to-cart-form">
+        <mat-form-field appearance="outline">
+          <input matInput type="number" min="1" max="99" formControlName="quantity" placeholder="Cantidad*">
+        </mat-form-field>
+
+        <button 
+          mat-raised-button 
+          type="submit"
+          class="add-to-cart-btn"
+          [disabled]="product.stock === 0">
+          Agregar al Carrito
+        </button>
+      </form>
+
+      <div class="product-details">
+        <h3>Detalles del Producto</h3>
+        <p><strong>Categoría:</strong> {{ product.category?.name }}</p>
+        <p><strong>Marca:</strong> {{ product.brand?.name }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODO EDICIÓN PARA ADMIN -->
+  <div class="product-edit" *ngIf="isEditMode">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Editar Producto</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="editForm" class="edit-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre del Producto</mat-label>
+              <input matInput formControlName="name" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descripción Corta</mat-label>
+              <input matInput formControlName="shortDescription">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descripción Completa</mat-label>
+              <textarea matInput formControlName="description" rows="4"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row two-columns">
+            <mat-form-field appearance="outline">
+              <mat-label>Precio</mat-label>
+              <input matInput type="number" formControlName="price" required>
+              <span matPrefix>$ </span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Stock</mat-label>
+              <input matInput type="number" formControlName="stock" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-slide-toggle formControlName="hasDiscount">
+              Tiene Descuento
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-row" *ngIf="editForm.value.hasDiscount">
+            <mat-form-field appearance="outline">
+              <mat-label>Porcentaje de Descuento</mat-label>
+              <input matInput type="number" formControlName="discountPercent" min="0" max="100">
+              <span matSuffix>%</span>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row two-columns">
+            <mat-form-field appearance="outline">
+              <mat-label>Categoría</mat-label>
+              <mat-select formControlName="categoryId">
+                <mat-option [value]="null">Sin categoría</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Marca</mat-label>
+              <mat-select formControlName="brandId">
+                <mat-option [value]="null">Sin marca</mat-option>
+                <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                  {{ brand.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button type="button" (click)="onCancelEdit()">
+              Cancelar
+            </button>
+            <button mat-raised-button color="primary" type="button" (click)="onSaveProduct()" [disabled]="editForm.invalid">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div *ngIf="!(product$ | async)" class="loading">
+  Cargando...
+</div>

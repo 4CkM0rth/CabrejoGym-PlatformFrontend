@@ -1,0 +1,361 @@
+/* ============================================
+   HEADER COMPONENT
+   CabrejoGym - Navigation Bar
+   Dark Theme: Background #161616, Accent #fff212
+   ============================================ */
+
+.header {
+  background: #161616 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 20px;
+  min-height: 70px;
+}
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 30px;
+  height: 70px;
+}
+
+/* ============================================
+   LOGO SECTION
+   ============================================ */
+
+.logo-section {
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.logo-img {
+  height: 55px;
+  width: auto;
+}
+
+
+/* ============================================
+   NAVIGATION MENU
+   ============================================ */
+
+.nav-menu {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: #fff212;
+    border-bottom-color: #fff212;
+  }
+
+  &.active {
+    color: #fff212;
+    border-bottom-color: #fff212;
+  }
+}
+
+/* ============================================
+   ACTIONS SECTION
+   ============================================ */
+
+.actions-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .search-field {
+    width: 280px;
+
+    ::ng-deep {
+      // Contenedor principal con borde redondeado
+      .mat-mdc-text-field-wrapper {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 30px;
+        border: 1px solid #3a3a3a;
+        overflow: hidden;
+      }
+
+      .mat-mdc-form-field-wrapper {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mat-mdc-form-field-focus-overlay {
+        display: none;
+      }
+
+      .mat-mdc-form-field-label,
+      .mat-mdc-input-element {
+        color: #ffffff !important;
+        font-size: 15px;
+        caret-color: #ffffff !important;
+      }
+
+      // Placeholder
+      .mat-mdc-input-element::placeholder {
+        color: #B3B3B3 !important;
+      }
+
+      // Ocultar completamente el outline interno de Material
+      .mdc-notched-outline {
+        display: none !important;
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        display: none !important;
+        border: none !important;
+      }
+
+      .mat-mdc-notch-piece {
+        display: none !important;
+        border: none !important;
+      }
+
+      .mat-icon {
+        color: #ffffff !important;
+      }
+
+      .mat-mdc-form-field-infix {
+        padding: 12px 16px;
+        min-height: 48px;
+        border: none;
+      }
+
+      .mat-mdc-form-field-flex {
+        align-items: center;
+        padding: 0 16px;
+      }
+
+      // NO cambiar nada en focus
+      .mat-mdc-form-field.mat-focused {
+        .mat-mdc-text-field-wrapper {
+          border-color: #3a3a3a;
+        }
+
+        .mdc-notched-outline,
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          display: none !important;
+          border: none !important;
+        }
+      }
+
+      // Quitar outline del input nativo
+      input {
+        outline: none !important;
+      }
+    }
+  }
+}
+
+.action-btn {
+  color: #ffffff !important;
+  width: 48px;
+  height: 48px;
+  transition: all 0.3s ease;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  &:hover {
+    background: rgba(255, 242, 18, 0.1) !important;
+    color: #fff212 !important;
+  }
+
+  &.cart-btn {
+    ::ng-deep .mat-badge-content {
+      background: #fff212;
+      color: #161616;
+      font-weight: 700;
+    }
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .search-box {
+    .search-field {
+      width: 220px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 15px;
+    min-height: 60px;
+  }
+
+  .toolbar-content {
+    gap: 15px;
+    height: 60px;
+  }
+
+  .logo-img {
+    height: 45px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .search-box {
+    display: none;
+  }
+
+  .action-btn {
+    width: 44px;
+    height: 44px;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    min-height: 56px;
+  }
+
+  .toolbar-content {
+    height: 56px;
+  }
+
+  .logo-img {
+    height: 40px;
+  }
+
+  .actions-section {
+    gap: 8px;
+  }
+
+  .action-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ============================================
+   USER MENU DROPDOWN (CDK Overlay - needs ::ng-deep)
+   Siempre oscuro en ambos temas
+   ============================================ */
+
+::ng-deep .user-menu.mat-mdc-menu-panel {
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  margin-top: 8px;
+  background: #2A2A2A;
+  border: 1px solid #3a3a3a;
+}
+
+::ng-deep .user-menu .mat-mdc-menu-content {
+  padding: 8px;
+  background: #2A2A2A;
+}
+
+::ng-deep .user-menu .mat-mdc-menu-item {
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #2A2A2A;
+  color: #ffffff;
+
+  &:last-child { margin-bottom: 0; }
+
+  mat-icon {
+    color: #ffffff;
+    margin-right: 0;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .mdc-list-item__primary-text,
+  span,
+  .mat-mdc-menu-item-text {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  &:hover {
+    background: #333333;
+    mat-icon { color: #fff212; }
+  }
+
+  &:last-child {
+    mat-icon { color: #f44336; }
+    .mdc-list-item__primary-text,
+    span,
+    .mat-mdc-menu-item-text { color: #f44336; }
+    &:hover { background: rgba(244, 67, 54, 0.15); }
+  }
+}
+
+::ng-deep .user-menu mat-divider,
+::ng-deep .user-menu .mat-divider {
+  margin: 8px 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}

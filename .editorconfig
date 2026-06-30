@@ -1,0 +1,38 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+*.pot
+*.mo
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependency directories
+node_modules/
+npm-debug.log*
+
+# Build directories
+dist/
+build/
+out-tsc/
+
+# Environment files (copy and fill with your values)
+.env
+.env.local
+
+# OS specific
+Thumbs.db
+.DS_Store
+
+# Angular
+angular.json.bak
+.angular/
+
+# Others
+*.orig
+*.rej

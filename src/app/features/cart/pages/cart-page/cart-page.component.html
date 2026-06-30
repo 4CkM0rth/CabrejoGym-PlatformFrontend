@@ -1,0 +1,91 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>Mi Carrito</h1>
+    <button 
+      mat-stroked-button 
+      color="warn" 
+      class="clear-cart-btn"
+      *ngIf="(cart$ | async) as cart; else loading"
+      [hidden]="!cart.items || cart.items.length === 0"
+      (click)="clearCart()">
+      <mat-icon>delete_sweep</mat-icon>
+      Limpiar Carrito
+    </button>
+    <ng-template #loading></ng-template>
+  </div>
+
+  <div class="cart-content" *ngIf="cart$ | async as cart">
+    <div class="cart-items" *ngIf="cart && cart.items && cart.items.length > 0; else emptyCart">
+      <!-- Lista de productos -->
+      <div class="products-list">
+        <mat-card class="product-item" *ngFor="let item of cart.items">
+          <div class="product-info">
+            <div class="product-details">
+              <h3>{{ item.productName }}</h3>
+              <p class="product-price">Precio: ${{ item.productPrice | number:'1.0-0':locale }}</p>
+            </div>
+            
+            <div class="product-quantity">
+              <label>Cantidad:</label>
+              <input 
+                type="number" 
+                min="1" 
+                [value]="item.quantity"
+                (change)="updateQuantity(item.id, $any($event.target).value)"
+                class="quantity-input">
+            </div>
+            
+            <div class="product-subtotal">
+              <span class="subtotal-label">Subtotal:</span>
+              <span class="subtotal-value">${{ item.lineTotal | number:'1.0-0':locale }}</span>
+            </div>
+            
+            <button mat-icon-button color="warn" (click)="removeItem(item.id)" class="remove-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="cart-summary">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Resumen</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="summary-row">
+              <span>Subtotal:</span>
+              <strong>${{ cart.subtotal | number:'1.0-0':locale }}</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Items:</span>
+              <strong>{{ cart.totalItems }}</strong>
+            </div>
+
+            <div class="actions">
+              <button mat-stroked-button (click)="continueShopping()">
+                Continuar Comprando
+              </button>
+              <button mat-raised-button class="checkout-btn" routerLink="/checkout">
+                Proceder al Pago
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <mat-icon class="empty-icon">shopping_cart</mat-icon>
+        <h2>Tu carrito está vacío</h2>
+        <p>Agrega productos para comenzar tu compra</p>
+        <button mat-raised-button color="primary" routerLink="/products">
+          Ver Productos
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

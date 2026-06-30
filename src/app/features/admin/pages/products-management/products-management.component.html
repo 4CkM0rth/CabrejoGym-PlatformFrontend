@@ -1,0 +1,138 @@
+<div class="admin-page">
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">Productos</h2>
+      <p class="page-subtitle">{{ filteredProducts.length }} de {{ products.length }} productos</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="page-btn page-btn-primary" (click)="openProductDialog()">
+        <mat-icon>add</mat-icon>
+        Nuevo Producto
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-bar">
+    <div class="filter-input-wrap">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Buscar por nombre o SKU…" />
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>category</mat-icon>
+      <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+        <option value="">Todas las categorías</option>
+        <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+      </select>
+    </div>
+
+    <div class="filter-select-wrap">
+      <mat-icon>inventory</mat-icon>
+      <select [(ngModel)]="stockFilter" (change)="applyFilters()">
+        <option value="">Todo el stock</option>
+        <option value="available">Disponible</option>
+        <option value="low">Stock Bajo</option>
+        <option value="out">Sin Stock</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="admin-table-wrap" *ngIf="!loading">
+    <table class="admin-table" *ngIf="filteredProducts.length > 0; else emptyProducts">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts">
+
+          <!-- Producto -->
+          <td>
+            <div class="product-cell">
+              <div class="product-thumb">
+                <img *ngIf="product.images?.length" [src]="product.images[0].url" [alt]="product.name" />
+                <mat-icon *ngIf="!product.images?.length">image_not_supported</mat-icon>
+              </div>
+              <div class="product-cell-info">
+                <span class="product-name">{{ product.name }}</span>
+                <span class="product-slug">{{ product.slug }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Categoría -->
+          <td>
+            <span class="badge badge-neutral">{{ product.category?.name || 'Sin categoría' }}</span>
+          </td>
+
+          <!-- Precio -->
+          <td>
+            <strong class="price-cell">${{ product.price | number:'1.0-0':'es-CO' }}</strong>
+          </td>
+
+          <!-- Stock -->
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-success': product.stock > 10,
+              'badge-warning': product.stock > 0 && product.stock <= 10,
+              'badge-danger':  product.stock === 0
+            }">{{ product.stock }}</span>
+          </td>
+
+          <!-- Estado -->
+          <td>
+            <button class="status-toggle"
+              [class.published]="product.status === 'PUBLISHED'"
+              (click)="toggleProductStatus(product)">
+              <span class="toggle-dot"></span>
+              <span>{{ product.status === 'PUBLISHED' ? 'Publicado' : product.status === 'DRAFT' ? 'Borrador' : 'Oculto' }}</span>
+            </button>
+          </td>
+
+          <!-- Acciones -->
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn" (click)="editProduct(product)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageStock(product)" matTooltip="Stock">
+                <mat-icon>inventory</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageImages(product)" matTooltip="Imágenes">
+                <mat-icon>photo_library</mat-icon>
+              </button>
+              <button class="icon-btn" (click)="manageVariants(product)" matTooltip="Variantes">
+                <mat-icon>tune</mat-icon>
+              </button>
+              <button class="icon-btn danger" (click)="deleteProduct(product)" matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyProducts>
+      <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
+        <h3>No se encontraron productos</h3>
+        <p>Ajusta los filtros o crea un nuevo producto</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

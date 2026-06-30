@@ -1,0 +1,96 @@
+.branches-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h1 { font-size: 36px; text-align: center; margin-bottom: 10px; color: var(--text-primary); font-weight: 700; }
+.subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 40px; font-size: 16px; }
+
+.branches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.branch-card {
+  display: flex; flex-direction: column; height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  &:hover { transform: translateY(-5px); box-shadow: 0 12px 28px var(--card-shadow); }
+
+  .branch-image {
+    width: 100%; height: 180px; overflow: hidden;
+    border-radius: 20px 20px 0 0;
+    background: var(--image-placeholder-bg);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+
+    img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s ease, filter 0.3s ease;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.18) 100%);
+      pointer-events: none;
+      border-radius: 20px 20px 0 0;
+    }
+  }
+
+  &:hover .branch-image img { transform: scale(1.04); }
+
+  mat-card-header {
+    padding: 20px 20px 10px 20px;
+    mat-card-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin: 0; }
+  }
+
+  mat-card-content {
+    flex: 1; padding: 10px 20px 20px 20px; display: flex; flex-direction: column; gap: 12px;
+    .info-item {
+      display: flex; align-items: flex-start; gap: 10px; color: var(--text-secondary); font-size: 14px; line-height: 1.5;
+      mat-icon { color: #888888; font-size: 20px; width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+      span { flex: 1; }
+    }
+  }
+
+  mat-card-actions {
+    padding: 16px 20px 20px 20px; margin: 0; display: flex; justify-content: stretch;
+    button {
+      width: 100%; background-color: #fff212; color: #1a1a1a; font-weight: 600;
+      padding: 12px 24px; border-radius: 14px; text-transform: none;
+      letter-spacing: 0.3px; transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(255, 242, 18, 0.2);
+      .mdc-button__label { color: #1a1a1a !important; }
+      &:hover { background-color: #e6d910; box-shadow: 0 6px 12px rgba(255, 242, 18, 0.3); transform: translateY(-2px); }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .branches-grid { grid-template-columns: 1fr; gap: 20px; }
+  h1 { font-size: 28px; } .subtitle { font-size: 14px; }
+  .branch-card .branch-image { height: 150px; }
+}
+@media (max-width: 480px) {
+  .branches-container { padding: 20px 15px; }
+  h1 { font-size: 24px; }
+  .branch-card { mat-card-header mat-card-title { font-size: 18px; } .branch-image { height: 120px; } }
+}
+
+:host-context(body.dark-theme) {
+  .branch-card {
+    background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+
+    .branch-image img { filter: brightness(0.82) contrast(1.05); }
+
+    mat-card-content .info-item mat-icon { color: #666; }
+  }
+}

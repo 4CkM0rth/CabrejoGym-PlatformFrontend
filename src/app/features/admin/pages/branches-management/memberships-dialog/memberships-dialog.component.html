@@ -1,0 +1,68 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>card_membership</mat-icon>
+      <h2>Membresías — {{ branch.name }}</h2>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="close()">
+      <span class="close-icon">✕</span>
+    </button>
+  </div>
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <mat-dialog-content>
+    <!-- Lista de planes -->
+    <div class="plans-list" *ngIf="plans.length > 0">
+      <div class="plan-item" *ngFor="let plan of plans" [class.inactive]="!plan.active">
+        <div class="plan-info">
+          <div class="plan-header">
+            <strong>{{ plan.name }}</strong>
+            <span class="plan-price">${{ plan.price | number:'1.0-0':'es-CO' }}</span>
+          </div>
+          <small>{{ plan.durationMonths }} {{ plan.durationMonths === 1 ? 'mes' : 'meses' }}</small>
+          <small *ngIf="plan.description" class="plan-desc">{{ plan.description }}</small>
+        </div>
+        <div class="plan-actions">
+          <mat-slide-toggle [checked]="plan.active" (change)="togglePlanStatus(plan)"></mat-slide-toggle>
+          <button mat-icon-button class="delete-btn" (click)="deletePlan(plan)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && plans.length === 0">
+      <mat-icon>info_outline</mat-icon>
+      <p>No hay planes de membresía registrados</p>
+    </div>
+
+    <!-- Agregar nuevo -->
+    <div class="add-section">
+      <h3>Agregar Plan</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre del Plan</mat-label>
+        <input matInput [(ngModel)]="form.name" placeholder="Ej: Plan Mensual">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción (opcional)</mat-label>
+        <input matInput [(ngModel)]="form.description" placeholder="Descripción del plan...">
+      </mat-form-field>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Precio</mat-label>
+          <span matTextPrefix>$&nbsp;</span>
+          <input matInput type="number" [(ngModel)]="form.price" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Duración (meses)</mat-label>
+          <input matInput type="number" [(ngModel)]="form.durationMonths" min="1" placeholder="1">
+        </mat-form-field>
+      </div>
+      <button mat-raised-button class="add-btn" (click)="addPlan()" [disabled]="saving || !form.name.trim() || !form.price">
+        <mat-icon>add</mat-icon>
+        {{ saving ? 'Creando...' : 'Agregar Plan' }}
+      </button>
+    </div>
+  </mat-dialog-content>
+</div>

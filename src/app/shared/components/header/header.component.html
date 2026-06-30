@@ -1,0 +1,77 @@
+<mat-toolbar class="header">
+  <div class="toolbar-content">
+    <div class="logo-section">
+      <a routerLink="/home" class="logo">
+        <img src="assets/images/cabrejo-gym-logo.png" alt="CABREJOGYM" class="logo-img">
+      </a>
+    </div>
+
+    <nav class="nav-menu">
+      <a routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" class="nav-link">
+        Productos
+      </a>
+      <a routerLink="/branches" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" class="nav-link">
+        Sedes
+      </a>
+    </nav>
+
+    <div class="actions-section">
+      <div class="search-box">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar productos...</mat-label>
+          <input matInput>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <button mat-icon-button class="action-btn theme-btn" (click)="themeService.toggle()" [matTooltip]="themeService.isDark() ? 'Modo claro' : 'Modo oscuro'">
+        <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-icon-button routerLink="/cart" class="action-btn cart-btn" [matTooltip]="'Carrito'">
+        <mat-icon [matBadge]="(cartCount$ | async) || 0" 
+                  [matBadgeHidden]="(cartCount$ | async) === 0"
+                  matBadgeColor="warn">
+          shopping_cart
+        </mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="action-btn user-btn" [matTooltip]="'Mi cuenta'">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu">
+        <div *ngIf="!(authService.currentUser$ | async); else loggedIn">
+          <button mat-menu-item routerLink="/auth/login">
+            <mat-icon>login</mat-icon>
+            <span>Iniciar sesión</span>
+          </button>
+          <button mat-menu-item routerLink="/auth/register">
+            <mat-icon>person_add</mat-icon>
+            <span>Registrarse</span>
+          </button>
+        </div>
+
+        <ng-template #loggedIn>
+          <button mat-menu-item routerLink="/account">
+            <mat-icon>person</mat-icon>
+            <span>Mi Cuenta</span>
+          </button>
+          <button mat-menu-item routerLink="/orders">
+            <mat-icon>receipt_long</mat-icon>
+            <span>Mis Pedidos</span>
+          </button>
+          <button mat-menu-item *ngIf="hasAdminRole()" routerLink="/admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Panel Admin</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar sesión</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
