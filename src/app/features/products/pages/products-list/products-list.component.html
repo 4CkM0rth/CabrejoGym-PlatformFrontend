@@ -1,73 +1,179 @@
-<div class="products-container">
-  <div class="filters-section">
-    <h3>Filtros</h3>
+<div class="products-page">
+
+  <!-- ── Sidebar Filtros ── -->
+  <aside class="filters-sidebar">
+    <div class="sidebar-header">
+      <mat-icon>tune</mat-icon>
+      <h3>Filtros</h3>
+      <button class="clear-btn" (click)="clearFilters()" type="button">Limpiar</button>
+    </div>
+
     <form [formGroup]="filterForm">
-      <mat-form-field>
-        <input matInput formControlName="search" placeholder="Buscar">
-      </mat-form-field>
 
-      <mat-form-field>
-        <mat-select formControlName="category" placeholder="Categoría">
-          <mat-option [value]="null">Todas las categorías</mat-option>
-          <mat-optgroup *ngFor="let parent of rootCategories" [label]="parent.name">
-            <mat-option [value]="parent.id">Todos ({{ parent.name }})</mat-option>
-            <mat-option *ngFor="let child of parent.children" [value]="child.id">
-              {{ child.name }}
+      <!-- Buscar -->
+      <div class="filter-block">
+        <label class="filter-label">Buscar</label>
+        <div class="filter-input-wrap">
+          <mat-icon>search</mat-icon>
+          <input formControlName="search" placeholder="Nombre del producto…" (input)="onSearchInput()" />
+        </div>
+      </div>
+
+      <!-- Categoría -->
+      <div class="filter-block">
+        <label class="filter-label">Categoría</label>
+        <div class="filter-select-wrap">
+          <mat-icon>category</mat-icon>
+          <mat-select formControlName="category" placeholder="Todas" panelClass="products-select-panel">
+            <mat-option [value]="null">Todas las categorías</mat-option>
+            <mat-optgroup *ngFor="let parent of rootCategories" [label]="parent.name">
+              <mat-option [value]="parent.id">Todos ({{ parent.name }})</mat-option>
+              <mat-option *ngFor="let child of parent.children" [value]="child.id">
+                {{ child.name }}
+              </mat-option>
+            </mat-optgroup>
+            <mat-option *ngFor="let cat of standaloneCategories" [value]="cat.id">
+              {{ cat.name }}
             </mat-option>
-          </mat-optgroup>
-          <mat-option *ngFor="let cat of standaloneCategories" [value]="cat.id">
-            {{ cat.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          </mat-select>
+        </div>
+      </div>
 
-      <mat-form-field>
-        <mat-select formControlName="brand" placeholder="Marca">
-          <mat-option [value]="null">Todas las marcas</mat-option>
-          <mat-option *ngFor="let br of brands$ | async" [value]="br.id">
-            {{ br.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- Marca -->
+      <div class="filter-block">
+        <label class="filter-label">Marca</label>
+        <div class="filter-select-wrap">
+          <mat-icon>branding_watermark</mat-icon>
+          <mat-select formControlName="brand" placeholder="Todas" panelClass="products-select-panel">
+            <mat-option [value]="null">Todas las marcas</mat-option>
+            <mat-option *ngFor="let br of brands$ | async" [value]="br.id">{{ br.name }}</mat-option>
+          </mat-select>
+        </div>
+      </div>
 
-      <button mat-raised-button class="cart-btn" (click)="applyFilters()">
+      <div class="filter-separator"></div>
+
+      <!-- Ordenar -->
+      <div class="filter-block">
+        <label class="filter-label">Ordenar por</label>
+        <div class="filter-select-wrap">
+          <mat-icon>sort</mat-icon>
+          <mat-select formControlName="sortBy" (selectionChange)="onSortChange()" panelClass="products-select-panel">
+            <mat-option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <button class="apply-btn" (click)="applyFilters()" type="button">
+        <mat-icon>search</mat-icon>
         Aplicar Filtros
       </button>
 
-      <div class="sort-section">
-        <h3>Ordenar por</h3>
-        <mat-form-field>
-          <mat-select formControlName="sortBy" (selectionChange)="onSortChange()">
-            <mat-option *ngFor="let opt of sortOptions" [value]="opt.value">
-              {{ opt.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
     </form>
-  </div>
+  </aside>
 
-  <div class="products-grid-section">
-    <h2>Productos</h2>
-    <mat-grid-list cols="3" rowHeight="500px">
-      <mat-grid-tile *ngFor="let product of (products$ | async)?.content">
-        <mat-card class="product-card">
-          <img [src]="product.images && product.images.length > 0 ? product.images[0].url : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TaW4gSW1hZ2VuPC90ZXh0Pjwvc3ZnPg=='" 
-               [alt]="product.name" 
-               class="product-image">
-          <mat-card-content>
-            <h3>{{ product.name }}</h3>
-            <p class="description">{{ product.shortDescription || product.description }}</p>
-            <p class="price">${{ product.price | number:'1.0-0':locale }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button class="details-btn" [routerLink]="['/products', product.id]">Ver Detalles</button>
-            <button mat-raised-button class="cart-btn" (click)="addToCart(product.id)">
-              Agregar al Carrito
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+  <!-- ── Grid Section ── -->
+  <div class="products-main">
+
+    <!-- Top bar -->
+    <div class="products-topbar">
+      <div class="topbar-left">
+        <h2 class="products-title">Productos</h2>
+        <span class="results-count" *ngIf="(products$ | async) as result">
+          {{ result.totalElements || result.content?.length || 0 }} resultados
+        </span>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="products-loading" *ngIf="loading">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line w-80"></div>
+          <div class="skeleton-line w-50"></div>
+          <div class="skeleton-line w-40"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <ng-container *ngIf="!loading">
+      <ng-container *ngIf="(products$ | async) as result">
+
+        <!-- Sin resultados -->
+        <div class="empty-products" *ngIf="!result.content || result.content.length === 0">
+          <div class="empty-icon">
+            <mat-icon>search_off</mat-icon>
+          </div>
+          <h3>No encontramos productos</h3>
+          <p>Prueba ajustar los filtros o buscar con otro término</p>
+          <button class="apply-btn" (click)="clearFilters()" type="button">
+            <mat-icon>refresh</mat-icon>
+            Ver todos los productos
+          </button>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="products-grid" *ngIf="result.content && result.content.length > 0">
+          <div class="product-card" *ngFor="let product of result.content">
+
+            <!-- Imagen -->
+            <div class="card-image-wrap">
+              <img class="card-image"
+                [src]="product.images?.length ? product.images[0].url : ''"
+                [alt]="product.name"
+                (error)="onImageError($event)" />
+
+              <!-- Badge descuento -->
+              <div class="discount-badge" *ngIf="product.hasDiscount && product.discountPercent">
+                -{{ product.discountPercent | number:'1.0-0' }}%
+              </div>
+
+              <!-- Overlay acciones hover -->
+              <div class="card-overlay">
+                <button class="overlay-btn" [routerLink]="['/products', product.id]" matTooltip="Ver detalles">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button class="overlay-btn" (click)="addToCart(product.id)" matTooltip="Agregar al carrito">
+                  <mat-icon>add_shopping_cart</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="card-body">
+              <span class="card-category" *ngIf="product.category">{{ product.category.name }}</span>
+
+              <h3 class="card-title">{{ product.name }}</h3>
+
+              <p class="card-desc">{{ product.shortDescription || product.description }}</p>
+
+              <div class="card-price-row">
+                <span class="card-price">${{ product.price | number:'1.0-0':locale }}</span>
+                <span class="card-original-price"
+                  *ngIf="product.hasDiscount && product.discountPercent">
+                  ${{ (product.price / (1 - product.discountPercent / 100)) | number:'1.0-0':locale }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="card-actions">
+              <button class="btn-details" [routerLink]="['/products', product.id]">
+                Ver Detalles
+              </button>
+              <button class="btn-cart" (click)="addToCart(product.id)">
+                <mat-icon>add_shopping_cart</mat-icon>
+                Agregar
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </ng-container>
+    </ng-container>
+
   </div>
 </div>
