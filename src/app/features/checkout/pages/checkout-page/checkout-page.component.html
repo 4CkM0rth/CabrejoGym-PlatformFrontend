@@ -304,7 +304,7 @@
       <div class="summary-card" *ngIf="cart$ | async as cart">
         <div class="summary-header">
           <h3>Tu Pedido</h3>
-          <span class="summary-badge">{{ cart.totalItems || cart.items?.length }} ítem(s)</span>
+          <span class="summary-badge">{{ cart.totalItems || cart.items.length }} ítem(s)</span>
         </div>
 
         <div class="summary-items">

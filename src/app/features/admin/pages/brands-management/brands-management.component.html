@@ -42,7 +42,7 @@
             <div class="brand-cell">
               <div class="brand-logo-wrap">
                 <img *ngIf="brand.logoUrl" [src]="brand.logoUrl" [alt]="brand.name" />
-                <span *ngIf="!brand.logoUrl">{{ brand.name?.[0] }}</span>
+                <span *ngIf="!brand.logoUrl">{{ brand.name[0] }}</span>
               </div>
               <div class="brand-cell-info">
                 <span class="brand-name">{{ brand.name }}</span>
