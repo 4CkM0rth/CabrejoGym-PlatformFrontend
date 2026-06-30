@@ -1,37 +1,93 @@
-<div class="branches-container">
-  <h1>Nuestras Sedes</h1>
-  <p class="subtitle">Visitanos en cualquiera de nuestras ubicaciones</p>
+<div class="bl-page">
 
-  <div class="branches-grid">
-    <mat-card class="branch-card" *ngFor="let branch of branches$ | async">
-      <div class="branch-image">
-        <img [src]="getBranchImage(branch)" [alt]="branch.name" (error)="onImageError($event)">
+  <!-- ── Hero ── -->
+  <div class="bl-hero">
+    <div class="bl-hero-inner">
+      <div class="bl-hero-badge">
+        <mat-icon>location_on</mat-icon>
+        <span>Nuestras ubicaciones</span>
       </div>
-      
-      <mat-card-header>
-        <mat-card-title>{{ branch.name }}</mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="info-item">
-          <mat-icon>location_on</mat-icon>
-          <span>{{ branch.address }}, {{ branch.city }}</span>
-        </div>
-        <div class="info-item">
-          <mat-icon>phone</mat-icon>
-          <span>{{ branch.phone }}</span>
-        </div>
-        <div class="info-item">
-          <mat-icon>email</mat-icon>
-          <span>{{ branch.email }}</span>
-        </div>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button mat-raised-button [routerLink]="['/branches', branch.id]">
-          Ver Detalles
-        </button>
-      </mat-card-actions>
-    </mat-card>
+      <h1 class="bl-hero-title">Nuestras <span class="accent">Sedes</span></h1>
+      <p class="bl-hero-subtitle">Visítanos en cualquiera de nuestras instalaciones de última generación</p>
+    </div>
   </div>
+
+  <!-- ── Loading ── -->
+  <div class="bl-loading" *ngIf="!(branches$ | async)">
+    <div class="bl-spinner"></div>
+  </div>
+
+  <!-- ── Grid ── -->
+  <div class="bl-container" *ngIf="branches$ | async as branches">
+
+    <div class="bl-empty" *ngIf="!branches.length">
+      <mat-icon>store_mall_directory</mat-icon>
+      <h3>No hay sedes disponibles</h3>
+      <p>Pronto agregaremos nuevas ubicaciones</p>
+    </div>
+
+    <div class="bl-grid" *ngIf="branches.length">
+      <div class="bl-card" *ngFor="let branch of branches" [routerLink]="['/branches', branch.id]">
+
+        <!-- Imagen -->
+        <div class="bl-card-img">
+          <img [src]="getBranchImage(branch)" [alt]="branch.name" (error)="onImageError($event)" />
+          <div class="bl-card-status" [class.inactive]="!branch.active">
+            <span class="status-dot"></span>
+            {{ branch.active ? 'Abierta' : 'Cerrada' }}
+          </div>
+          <div class="bl-card-overlay">
+            <span class="bl-overlay-cta">
+              <mat-icon>arrow_forward</mat-icon>
+              Ver sede
+            </span>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="bl-card-body">
+          <h3 class="bl-card-name">{{ branch.name }}</h3>
+
+          <div class="bl-card-info">
+            <div class="bl-info-row" *ngIf="branch.city">
+              <mat-icon>location_city</mat-icon>
+              <span>{{ branch.city }}</span>
+            </div>
+            <div class="bl-info-row" *ngIf="branch.address">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ branch.address }}</span>
+            </div>
+            <div class="bl-info-row" *ngIf="branch.phone">
+              <mat-icon>phone</mat-icon>
+              <span>{{ branch.phone }}</span>
+            </div>
+            <div class="bl-info-row" *ngIf="branch.capacity">
+              <mat-icon>groups</mat-icon>
+              <span>Capacidad: {{ branch.capacity }} personas</span>
+            </div>
+          </div>
+
+          <!-- Amenities preview -->
+          <div class="bl-card-amenities" *ngIf="branch.amenities?.length">
+            <span class="bl-amenity-chip" *ngFor="let a of branch.amenities | slice:0:3">
+              {{ a.name }}
+            </span>
+            <span class="bl-amenity-more" *ngIf="(branch.amenities?.length || 0) > 3">
+              +{{ (branch.amenities?.length || 0) - 3 }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bl-card-footer">
+          <button class="bl-card-btn" [routerLink]="['/branches', branch.id]" (click)="$event.stopPropagation()">
+            <mat-icon>explore</mat-icon>
+            Ver Detalles
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>

@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BranchService } from '@core/services/branch.service';
 import { Branch } from '@core/models';
@@ -18,11 +14,7 @@ import { switchMap } from 'rxjs/operators';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatDialogModule
+    MatIconModule
   ],
   templateUrl: './branch-detail.component.html',
   styleUrls: ['./branch-detail.component.scss']
@@ -40,7 +32,6 @@ export class BranchDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private branchService: BranchService,
-    private dialog: MatDialog,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -48,6 +39,18 @@ export class BranchDetailComponent implements OnInit {
     this.branch$ = this.route.params.pipe(
       switchMap(params => this.branchService.getBranchById(params['id']))
     );
+  }
+
+  getBranchCoverImage(branch: Branch): string {
+    if (branch.images?.length) {
+      const primary = branch.images.find(i => i.isPrimary) ?? branch.images[0];
+      return primary.url;
+    }
+    return '';
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'assets/images/placeholder.svg';
   }
 
   openLightbox(imageUrl: string, images: any[]): void {
